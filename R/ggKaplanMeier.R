@@ -20,27 +20,26 @@ ggKM.censor <- function(data_summary, data_input) {
   return(do.call(rbind, output))
 }
 
-ggKM.step <- function(summary, fit) {
-  factors <- unique(summary$strata)
+ggKM.step <- function(data_summary, data_input) {
+  factors <- unique(data_summary$strata)
   output <- list()
   i <- 0
   for (f in factors) {
-    subdata <- summary[summary$strata == f,]
-    if (subdata$time[1] != 0) {
+    subdata_input <- data_input[data_input$strata == f,]
+    subdata_summary <- data_summary[data_summary$strata == f,]
+    if (subdata_summary$time[1] != 0) {
       startrow <- data.frame("time" = 0, "surv" = 1, "lower" = 1, "upper" = 1, "strata" = f)
-      subdata <- rbind(startrow, subdata)
+      subdata_summary <- rbind(startrow, subdata_summary)
     }
-    end <- 2 * nrow(subdata)
+    end <- 2 * nrow(subdata_summary)
     newdata <- data.frame(
-      "time" = rep(subdata$time, each = 2)[-1],
-      "surv" = rep(subdata$surv, each = 2)[-end],
-      "lower" = rep(subdata$lower, each = 2)[-end],
-      "upper" = rep(subdata$upper, each = 2)[-end],
+      "time" = rep(subdata_summary$time, each = 2)[-1],
+      "surv" = rep(subdata_summary$surv, each = 2)[-end],
+      "lower" = rep(subdata_summary$lower, each = 2)[-end],
+      "upper" = rep(subdata_summary$upper, each = 2)[-end],
       "strata" = f)
     endrow <- newdata[nrow(newdata),]
-    i <- i + 1
-    j <- seq_len(fit$strata[i]) + sum(fit$strata[seq_len(i - 1)])
-    endrow$time <- max(fit$time[j])
+    endrow$time <- max(subdata_input$time)
     output[[f]] <- rbind(newdata, endrow)
   }
   return(do.call(rbind, output))
@@ -48,7 +47,8 @@ ggKM.step <- function(summary, fit) {
 
 #' Kaplan–Meier plot
 #'
-#' Generates a Kaplan–Meier plot with optional confidence intervals and risk table.
+#' Generates a Kaplan–Meier plot with optional confidence intervals (based on 
+#' Greenwood's variance with a complementary log–log transformation) and risk table.
 #' @param time Numeric vector of follow-up times.
 #' @param status Numeric event indicator (1 = event, 0 = censored).
 #' @param group Grouping variable.
@@ -99,7 +99,7 @@ ggKM <- function(time, status, group,
   if (is.null(legend.labels)) legend.labels <- 0:(n_group - 1)
   data_input <- data.frame("time" = time, "status" = status, "strata" = as.factor(group))
   data_censor <- data_input[data_input$status == 0,]
-  fit <- survival::survfit(survival::Surv(time, status) ~ strata, data = data_input)
+  fit <- survival::survfit(survival::Surv(time, status) ~ strata, data = data_input, conf.type = "log-log")
   s <- summary(fit)
   if (is.null(s$strata)) {
     s$strata <- rep(0, length(s$time))
@@ -107,7 +107,7 @@ ggKM <- function(time, status, group,
     s$strata <- as.numeric(sub("strata=", "", s$strata))
   }
   data_summary <- data.frame(s[c("time", "surv", "lower", "upper", "strata")])
-  data_step <- ggKM.step(data_summary, fit)
+  data_step <- ggKM.step(data_summary, data_input)
   data_step$strata <- as.factor(data_step$strata)
   x_lim <- c(0, max(time))
   g_KM <- ggplot2::ggplot(data_step, ggplot2::aes(time, surv, color = strata)) +
@@ -188,3 +188,8 @@ ggKM <- function(time, status, group,
   }
   return(g)
 }
+
+library(patchwork)
+data <- survival::lung
+g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
+print(g)

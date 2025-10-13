@@ -87,7 +87,8 @@ ggKM(
 A \code{ggplot2} object (or \code{patchwork} composite if \code{risk.table = TRUE}).
 }
 \description{
-Generates a Kaplan–Meier plot with optional confidence intervals and risk table.
+Generates a Kaplan–Meier plot with optional confidence intervals (based on
+Greenwood's variance with a complementary log–log transformation) and risk table.
 }
 \examples{
 data <- survival::lung

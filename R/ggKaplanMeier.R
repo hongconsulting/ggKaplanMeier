@@ -189,7 +189,3 @@ ggKM <- function(time, status, group,
   return(g)
 }
 
-library(patchwork)
-data <- survival::lung
-g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
-print(g)

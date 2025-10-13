@@ -1,0 +1,14 @@
+.Rbuildignore
+.RData
+.Rhistory
+.Rcheck/
+.Rproj.user/
+README.html
+*.o
+*.Rproj
+*.so
+*.tar.gz
+.Rproj.user
+.httr-oauth
+.DS_Store
+.quarto

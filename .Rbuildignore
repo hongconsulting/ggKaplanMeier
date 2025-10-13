@@ -1,0 +1,15 @@
+^docs$
+^\.git$      
+^\.gitignore$
+LICENSE.md
+^man-roxygen$
+^_pkgdown.yml$
+^README.html$
+^README.Rmd$
+^\.Rcheck$            
+^\.RData$            
+^\.Rhistory$         
+^.*\.Rproj$
+^\.Rproj\.user$
+
+^README\.Rmd$

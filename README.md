@@ -1,0 +1,42 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# ggKaplanMeier
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Kaplan–Meier plots using the `ggplot2` package, with an overall
+Stata-like style. Differences compared to `survminer::ggsurvplot()`
+include:
+
+- Transparent confidence interval areas are always drawn behind survival
+  curves and never over them.
+
+- Censor marks are drawn as customizable line segments instead of point
+  symbols.
+
+- The risk table title is spaced uniformly with the risk table rows.
+
+- The Kaplan–Meier y-axis title remains fixed in place, unaffected by
+  the width of risk table labels.
+
+## Installation
+
+You can install the development version of ggKaplanMeier from
+[GitHub](https://github.com/hongconsulting/ggKaplanMeier) with:
+
+``` r
+remotes::install_github("hongconsulting/ggKaplanMeier")
+```
+
+## Example
+
+``` r
+library(ggKaplanMeier)
+data <- survival::lung
+g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
+print(g)
+```
+
+![](man/figures/README-example-1.png)<!-- -->

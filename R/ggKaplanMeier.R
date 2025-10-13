@@ -179,7 +179,7 @@ ggKM <- function(time, status, group,
     g_KM <- g_KM + ggplot2::labs(y = NULL) +
       ggplot2::annotation_custom(
         grid::textGrob(
-          "Survival", rot = 90, x = grid::unit(-2.75, "lines"),
+          title.s, rot = 90, x = grid::unit(-2.75, "lines"),
           gp = grid::gpar(fontsize = textsize.axis)
         )
       )

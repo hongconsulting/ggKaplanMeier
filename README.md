@@ -44,7 +44,7 @@ print(g)
 ## Further Reading
 
 1.  Greenwood, M., 1926. A report on the natural duration of cancer. In:
-    *Reports on Public Health and Medical Subjects*}\*, 33, pp. 1–26.
+    *Reports on Public Health and Medical Subjects*, 33, pp. 1–26.
     London: Her Majesty’s Stationery Office, Ministry of Health.
 2.  Rothman, K.J., 1978. Estimation of confidence limits for the
     cumulative probability of survival in life table analysis. *Journal

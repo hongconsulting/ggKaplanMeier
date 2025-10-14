@@ -45,16 +45,41 @@ ggKM.step <- function(data_summary, data_input) {
   return(do.call(rbind, output))
 }
 
+ggKM.CI <- function(data_input, method) {
+  if (!requireNamespace("km.ci", quietly = TRUE)) stop("[ggKM.CI] requires package 'km.ci'")
+  factors <- unique(data_input$strata)
+  output <- list()
+  for (f in factors) {
+    subdata_input <- data_input[data_input$strata == f,]
+    fit0 <- survival::survfit(survival::Surv(time, status) ~ 1, data = subdata_input)
+    fit <- km.ci::km.ci(fit0, conf.level = 0.95, tl = NA, tu = NA, method = method)
+    summary <- summary(fit)
+    output[[f]] <- data.frame(
+      "time" = summary$time,
+      "surv" = summary$surv,
+      "lower" = summary$lower,
+      "upper" = summary$upper,
+      "strata" = f)
+  }
+  return(do.call(rbind, output))
+}
+
 #' Kaplan–Meier plot
 #'
-#' Generates a Kaplan–Meier plot with optional confidence intervals (based on 
-#' Greenwood's variance with a complementary log–log transformation) and risk table.
+#' Generates a Kaplan–Meier plot with optional confidence intervals and risk table.
 #' @param time Numeric vector of follow-up times.
 #' @param status Numeric event indicator (1 = event, 0 = censored).
 #' @param group Grouping variable.
 #' @param breaks.s Y-axis (survival) tick marks. Default = `seq(0, 1, 0.25)`.
 #' @param breaks.t X-axis (time) tick marks. Default = `seq(0, max(time), by = 6)`.
-#' @param CI Logical; if `TRUE`, show confidence intervals. Default = `TRUE`.
+#' @param CI Integer indicating the CI type (options 2 to 4 are via the `km.ci` package):
+#'   \itemize{
+#'     \item \code{0}: none
+#'     \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)
+#'     \item \code{2}: pointwise CI using Rothman's binomial method² 
+#'     \item \code{3}: pointwise CI using Thomas–Grunkemeier likelihood-ratio method³
+#'     \item \code{4}: simultaneous confidence bands using Nair's equal precision method⁴ with log transformation 
+#'   }
 #' @param CI.alpha Alpha transparency of confidence intervals. Default = 0.2.
 #' @param colors Vector of colors. Default = `ggsci::pal_nejm()(8)`.
 #' @param grid.color Gridline color. Default = `rgb(0.95, 0.95, 0.95)`.
@@ -75,6 +100,18 @@ ggKM.step <- function(data_summary, data_input) {
 #' @param title.s Y-axis (survival) title. Default = "Survival".
 #' @param title.t X-axis (time) title. Default = "Time".
 #' @return A `ggplot2` object (or `patchwork` composite if `risk.table = TRUE`).
+#' @references
+#' 1. Greenwood, M., 1926. A report on the natural duration of cancer. In: 
+#' \emph{Reports on Public Health and Medical Subjects}, 33, pp. 1–26. London: 
+#' Her Majesty’s Stationery Office, Ministry of Health.
+#' 2. Rothman, K.J., 1978. Estimation of confidence limits for the cumulative 
+#' probability of survival in life table analysis. \emph{Journal of Chronic 
+#' Diseases}, 31(8), pp. 557–560.
+#' 3. Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation 
+#' of survival probabilities for censored data. \emph{Journal of the American 
+#' Statistical Association}, 70(352), pp. 865–871.
+#' 4. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
+#' data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
 #' @examples
 #' data <- survival::lung
 #' g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex,
@@ -84,7 +121,7 @@ ggKM.step <- function(data_summary, data_input) {
 #' @export
 ggKM <- function(time, status, group,
                  breaks.s = seq(0, 1, 0.25), breaks.t = NULL,
-                 CI = TRUE, CI.alpha = 0.2,
+                 CI = 1, CI.alpha = 0.2,
                  colors = ggsci::pal_nejm()(8),
                  grid.color = grDevices::rgb(0.95, 0.95, 0.95),
                  grid.s = seq(0, 1, 0.25), grid.t = NULL, grid.width = 0.5,
@@ -106,7 +143,17 @@ ggKM <- function(time, status, group,
   } else {
     s$strata <- as.numeric(sub("strata=", "", s$strata))
   }
-  data_summary <- data.frame(s[c("time", "surv", "lower", "upper", "strata")])
+  if (CI == 0 | CI == 1) {
+    data_summary <- data.frame(s[c("time", "surv", "lower", "upper", "strata")])
+  } else if (CI == 2) {
+    data_summary <- ggKM.CI(data_input, "rothman")
+  } else if (CI == 3) {
+    data_summary <- ggKM.CI(data_input, "grunkemeier")
+  } else if (CI == 4) {
+    data_summary <- ggKM.CI(data_input, "logep")
+  } else {
+    stop("[ggKM] invalid CI")
+  }
   data_step <- ggKM.step(data_summary, data_input)
   data_step$strata <- as.factor(data_step$strata)
   x_lim <- c(0, max(time))
@@ -130,7 +177,7 @@ ggKM <- function(time, status, group,
                    legend.position = legend.position,
                    legend.text = ggplot2::element_text(size = textsize.legend),
                    legend.text.align = legend.text.align)
-  if (CI) {
+  if (CI > 0) {
     g_KM <- g_KM +
       ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper, fill = strata),
                            alpha = CI.alpha, colour = NA)
@@ -188,4 +235,3 @@ ggKM <- function(time, status, group,
   }
   return(g)
 }
-

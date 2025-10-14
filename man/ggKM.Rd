@@ -10,7 +10,7 @@ ggKM(
   group,
   breaks.s = seq(0, 1, 0.25),
   breaks.t = NULL,
-  CI = TRUE,
+  CI = 1,
   CI.alpha = 0.2,
   colors = (ggsci::pal_nejm())(8),
   grid.color = grDevices::rgb(0.95, 0.95, 0.95),
@@ -43,7 +43,14 @@ ggKM(
 
 \item{breaks.t}{X-axis (time) tick marks. Default = \code{seq(0, max(time), by = 6)}.}
 
-\item{CI}{Logical; if \code{TRUE}, show confidence intervals. Default = \code{TRUE}.}
+\item{CI}{Integer indicating the CI type (options 2 to 4 are via the \code{km.ci} package):
+\itemize{
+\item \code{0}: none
+\item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)
+\item \code{2}: pointwise CI using Rothman's binomial method²
+\item \code{3}: pointwise CI using Thomas–Grunkemeier likelihood-ratio method³
+\item \code{4}: simultaneous confidence bands using Nair's equal precision method⁴ with log transformation
+}}
 
 \item{CI.alpha}{Alpha transparency of confidence intervals. Default = 0.2.}
 
@@ -87,8 +94,7 @@ ggKM(
 A \code{ggplot2} object (or \code{patchwork} composite if \code{risk.table = TRUE}).
 }
 \description{
-Generates a Kaplan–Meier plot with optional confidence intervals (based on
-Greenwood's variance with a complementary log–log transformation) and risk table.
+Generates a Kaplan–Meier plot with optional confidence intervals and risk table.
 }
 \examples{
 data <- survival::lung
@@ -96,4 +102,19 @@ g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex,
           legend.labels = c("Male", "Female"),
           title.s = "Overall survival", title.t = "Time (months)")
 print(g)
+}
+\references{
+\enumerate{
+\item Greenwood, M., 1926. A report on the natural duration of cancer. In:
+\emph{Reports on Public Health and Medical Subjects}, 33, pp. 1–26. London:
+Her Majesty’s Stationery Office, Ministry of Health.
+\item Rothman, K.J., 1978. Estimation of confidence limits for the cumulative
+probability of survival in life table analysis. \emph{Journal of Chronic
+Diseases}, 31(8), pp. 557–560.
+\item Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation
+of survival probabilities for censored data. \emph{Journal of the American
+Statistical Association}, 70(352), pp. 865–871.
+\item Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
+data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
+}
 }

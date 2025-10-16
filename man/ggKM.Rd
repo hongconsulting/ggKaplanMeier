@@ -116,8 +116,8 @@ Generates a Kaplan–Meier plot with optional confidence intervals and risk tabl
 }
 \examples{
 data <- survival::lung
-g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex,
-          legend.labels = c("Male", "Female"),
+g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 
+          breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"),
           title.s = "Overall survival", title.t = "Time (months)")
 print(g)
 }

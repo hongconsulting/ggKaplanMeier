@@ -71,19 +71,18 @@ ggKM(
 \item{legend.direction}{Legend orientation; either \code{"vertical"} (default) or \code{"horizontal"}.}
 
 \item{legend.justification}{Alignment anchor for the legend relative to its
-position. Can be a keyword pair such as \code{"left"}, \code{"center"}, \code{"right"},
-\code{"top"}, \code{"bottom"}, or a numeric vector of length 2 giving relative
-coordinates within the plot area. Default = \code{"center"}.}
+position. Can be a single keyword (e.g., \code{"center"}), a keyword pair specifying
+horizontal and vertical justification (e.g., \code{c("left", "top")}, \code{c("right", "bottom")})
+respectively, or a numeric vector of length 2 giving relative coordinates
+within the plot area. Default = \code{"center"}.}
 
 \item{legend.label.position}{Legend label position (\code{"left"} or \code{"right"}) relative to the legend symbol. Default = \code{"left"}.}
 
 \item{legend.labels}{Character vector of group labels.}
 
-\item{legend.ncol}{Integer specifying the number of columns in the legend
-when \code{legend.direction = "vertical"}. Default = \code{NULL}.}
+\item{legend.ncol}{Integer specifying the number of columns in the legend. Default = \code{NULL}.}
 
-\item{legend.nrow}{Integer specifying the number of rows in the legend
-when \code{legend.direction = "horizontal"}. Default = \code{NULL}.}
+\item{legend.nrow}{Integer specifying the number of rows in the legend. Default = \code{NULL}.}
 
 \item{legend.position}{Position of the legend. Can be a keyword such as
 \code{"none"}, \code{"left"}, \code{"right"}, \code{"bottom"}, or \code{"top"}, or a numeric vector

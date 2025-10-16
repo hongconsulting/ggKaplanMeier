@@ -91,15 +91,14 @@ ggKM.CI <- function(data_input, method) {
 #' @param grid.width Gridline thickness. Default = `0.5`.
 #' @param legend.direction Legend orientation; either `"vertical"` (default) or `"horizontal"`.
 #' @param legend.justification Alignment anchor for the legend relative to its
-#'   position. Can be a keyword pair such as `"left"`, `"center"`, `"right"`,
-#'   `"top"`, `"bottom"`, or a numeric vector of length 2 giving relative 
-#'   coordinates within the plot area. Default = `"center"`.
+#'   position. Can be a single keyword (e.g., `"center"`), a keyword pair specifying
+#'   horizontal and vertical justification (e.g., `c("left", "top")`, `c("right", "bottom")`) 
+#'   respectively, or a numeric vector of length 2 giving relative coordinates 
+#'   within the plot area. Default = `"center"`.
 #' @param legend.label.position Legend label position (`"left"` or `"right"`) relative to the legend symbol. Default = `"left"`.
 #' @param legend.labels Character vector of group labels.
-#' @param legend.ncol Integer specifying the number of columns in the legend
-#'   when `legend.direction = "vertical"`. Default = `NULL`.
-#' @param legend.nrow Integer specifying the number of rows in the legend
-#'   when `legend.direction = "horizontal"`. Default = `NULL`.
+#' @param legend.ncol Integer specifying the number of columns in the legend. Default = `NULL`.
+#' @param legend.nrow Integer specifying the number of rows in the legend. Default = `NULL`.
 #' @param legend.position Position of the legend. Can be a keyword such as 
 #'   `"none"`, `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector 
 #'   of length 2 giving relative coordinates within the plot area. Default = `c(0.9, 0.9)`.

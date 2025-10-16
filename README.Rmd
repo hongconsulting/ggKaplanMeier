@@ -40,7 +40,7 @@ remotes::install_github("hongconsulting/ggKaplanMeier")
 ```{r}
 library(ggKaplanMeier)
 data <- survival::lung
-g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex,  breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
+g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
 print(g)
 ```
 

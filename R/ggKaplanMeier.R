@@ -48,6 +48,23 @@ ggKM.step <- function(data_summary, data_input) {
   return(do.call(rbind, output))
 }
 
+ggKM.BPCP <- function(data_input, method) {
+  if (!requireNamespace("bpcp", quietly = TRUE)) stop("[ggKM.BPCP] requires package 'bpcp'")
+  factors <- unique(data_input$strata)
+  output <- list()
+  for (f in factors) {
+    subdata_input <- data_input[data_input$strata == f,]
+    fit <- bpcp::bpcpfit(subdata_input$time, subdata_input$status)
+    output_data <- data.frame("time" = fit[[1]]$L,
+                         "surv" = fit[[1]]$surv,
+                         "lower" = fit[[1]]$lower,
+                         "upper" = fit[[1]]$upper,
+                         "strata" = f) 
+    output[[as.character(f)]] <- output_data
+  }
+  return(do.call(rbind, output))
+}
+
 ggKM.CI <- function(data_input, method) {
   if (!requireNamespace("km.ci", quietly = TRUE)) stop("[ggKM.CI] requires package 'km.ci'")
   factors <- unique(data_input$strata)
@@ -57,7 +74,7 @@ ggKM.CI <- function(data_input, method) {
     fit0 <- survival::survfit(survival::Surv(time, status) ~ 1, data = subdata_input)
     fit <- km.ci::km.ci(fit0, conf.level = 0.95, tl = NA, tu = NA, method = method)
     summary <- summary(fit)
-    output[[f]] <- data.frame(
+    output[[as.character(f)]] <- data.frame(
       "time" = summary$time,
       "surv" = summary$surv,
       "lower" = summary$lower,
@@ -75,13 +92,15 @@ ggKM.CI <- function(data_input, method) {
 #' @param group Integer vector grouping variable.
 #' @param breaks.s Y-axis (survival) tick marks. Default = `seq(0, 1, 0.25)`.
 #' @param breaks.t X-axis (time) tick marks. Default = `seq(0, max(time), by = 12)`.
-#' @param CI Integer indicating the CI type (options `2` to `4` are via the `km.ci` package):
+#' @param CI Integer indicating the CI type (options `2`, `3` and `5` are via 
+#' the `km.ci` package, option `4` is via the `bpcp` package):
 #'   \itemize{
 #'     \item \code{0}: none
 #'     \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)
 #'     \item \code{2}: pointwise CI using Rothman's binomial method² 
 #'     \item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method³
-#'     \item \code{4}: simultaneous confidence bands using Nair's equal precision method⁴ with log transformation 
+#'     \item \code{4}: pointwise CI using the Fay–Brittain beta product confidence procedure⁴
+#'     \item \code{5}: simultaneous confidence bands using Nair's equal precision method⁵ with log transformation 
 #'   }
 #' @param CI.alpha Alpha transparency of confidence intervals. Default = `0.2`.
 #' @param colors Vector of colors. Default = `ggsci::pal_nejm()(8)`.
@@ -123,7 +142,10 @@ ggKM.CI <- function(data_input, method) {
 #' 3. Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation 
 #' of survival probabilities for censored data. \emph{Journal of the American 
 #' Statistical Association}, 70(352), pp. 865–871.
-#' 4. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
+#' 4. Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence 
+#' intervals for a survival distribution with right‐censored data.
+#' \emph{Statistics in Medicine}, 35(16), pp. 2726–2740.
+#' 5. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 #' data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
 #' @examples
 #' data <- survival::lung
@@ -166,6 +188,8 @@ ggKM <- function(time, status, group,
   } else if (CI == 3) {
     data_summary <- ggKM.CI(data_input, "grunkemeier")
   } else if (CI == 4) {
+    data_summary <- ggKM.BPCP(data_input)
+  } else if (CI == 5) {
     data_summary <- ggKM.CI(data_input, "logep")
   } else {
     stop("[ggKM] invalid CI")
@@ -219,9 +243,12 @@ ggKM <- function(time, status, group,
     s <- summary(fit, times = breaks.t)
     data_risk <- data.frame(
       time = s$time,
-      strata = as.factor(as.numeric(sub("strata=", "", s$strata))),
+      strata = NA,
       n_risk = s$n.risk
     )
+    if (length(unique(s$strata)) > 1) {
+      data_risk$strata <- as.factor(as.numeric(sub("strata=", "", s$strata)))      
+    }
     data_risk <- rbind(data.frame(time = 0, strata = "At risk:", n_risk = ""), data_risk)
     data_risk$strata <- as.factor(data_risk$strata)
     data_risk$strata <- stats::relevel(data_risk$strata, "At risk:")

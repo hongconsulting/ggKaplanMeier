@@ -47,13 +47,15 @@ ggKM(
 
 \item{breaks.t}{X-axis (time) tick marks. Default = \code{seq(0, max(time), by = 12)}.}
 
-\item{CI}{Integer indicating the CI type (options \code{2} to \code{4} are via the \code{km.ci} package):
+\item{CI}{Integer indicating the CI type (options \code{2}, \code{3} and \code{5} are via
+the \code{km.ci} package, option \code{4} is via the \code{bpcp} package):
 \itemize{
 \item \code{0}: none
 \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)
 \item \code{2}: pointwise CI using Rothman's binomial method²
 \item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method³
-\item \code{4}: simultaneous confidence bands using Nair's equal precision method⁴ with log transformation
+\item \code{4}: pointwise CI using the Fay–Brittain beta product confidence procedure⁴
+\item \code{5}: simultaneous confidence bands using Nair's equal precision method⁵ with log transformation
 }}
 
 \item{CI.alpha}{Alpha transparency of confidence intervals. Default = \code{0.2}.}
@@ -132,6 +134,9 @@ Diseases}, 31(8), pp. 557–560.
 \item Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation
 of survival probabilities for censored data. \emph{Journal of the American
 Statistical Association}, 70(352), pp. 865–871.
+\item Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence
+intervals for a survival distribution with right‐censored data.
+\emph{Statistics in Medicine}, 35(16), pp. 2726–2740.
 \item Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
 }

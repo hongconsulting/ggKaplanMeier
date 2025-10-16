@@ -39,7 +39,7 @@ ggKM(
 \arguments{
 \item{time}{Numeric vector of follow-up times.}
 
-\item{status}{Numeric event indicator (1 = event, 0 = censored).}
+\item{status}{Numeric event indicator (\code{1} = event, \code{0} = censored).}
 
 \item{group}{Integer vector grouping variable.}
 
@@ -47,35 +47,35 @@ ggKM(
 
 \item{breaks.t}{X-axis (time) tick marks. Default = \code{seq(0, max(time), by = 12)}.}
 
-\item{CI}{Integer indicating the CI type (options 2 to 4 are via the \code{km.ci} package):
+\item{CI}{Integer indicating the CI type (options \code{2} to \code{4} are via the \code{km.ci} package):
 \itemize{
 \item \code{0}: none
 \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)
 \item \code{2}: pointwise CI using Rothman's binomial method²
-\item \code{3}: pointwise CI using Thomas–Grunkemeier likelihood-ratio method³
+\item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method³
 \item \code{4}: simultaneous confidence bands using Nair's equal precision method⁴ with log transformation
 }}
 
-\item{CI.alpha}{Alpha transparency of confidence intervals. Default = 0.2.}
+\item{CI.alpha}{Alpha transparency of confidence intervals. Default = \code{0.2}.}
 
 \item{colors}{Vector of colors. Default = \code{ggsci::pal_nejm()(8)}.}
 
-\item{grid.color}{Gridline color. Default = \code{rgb(0.95, 0.95, 0.95)}.}
+\item{grid.color}{Gridline color. Default = \code{grDevices::rgb(0.95, 0.95, 0.95)}.}
 
 \item{grid.s}{Horizontal gridline positions. Default = \code{seq(0, 1, 0.25)}.}
 
 \item{grid.t}{Vertical gridline positions. Default = \code{NULL}.}
 
-\item{grid.width}{Gridline thickness. Default = 0.5.}
+\item{grid.width}{Gridline thickness. Default = \code{0.5}.}
 
-\item{legend.direction}{Legend orientation; either "vertical" (default) or "horizontal".}
+\item{legend.direction}{Legend orientation; either \code{"vertical"} (default) or \code{"horizontal"}.}
 
 \item{legend.justification}{Alignment anchor for the legend relative to its
 position. Can be a keyword pair such as \code{"left"}, \code{"center"}, \code{"right"},
 \code{"top"}, \code{"bottom"}, or a numeric vector of length 2 giving relative
-coordinates within the plot area. Default = "center"}
+coordinates within the plot area. Default = \code{"center"}.}
 
-\item{legend.label.position}{Legend label position ("left" or "right") relative to the legend symbol. Default = "left".}
+\item{legend.label.position}{Legend label position (\code{"left"} or \code{"right"}) relative to the legend symbol. Default = \code{"left"}.}
 
 \item{legend.labels}{Character vector of group labels.}
 
@@ -89,25 +89,25 @@ when \code{legend.direction = "horizontal"}. Default = \code{NULL}.}
 \code{"none"}, \code{"left"}, \code{"right"}, \code{"bottom"}, or \code{"top"}, or a numeric vector
 of length 2 giving relative coordinates within the plot area. Default = \code{c(0.9, 0.9)}.}
 
-\item{legend.text.align}{Legend text alignment: 0 = left, 0.5 = center, 1 = right. Default = 1.}
+\item{legend.text.align}{Legend text alignment: \code{0} = left, \code{0.5} = center, \code{1} = right. Default = \code{1}.}
 
-\item{line.width}{Line width survival curves and censor marks. Default = 0.5.}
+\item{line.width}{Line width survival curves and censor marks. Default = \code{0.5}.}
 
-\item{line.height}{Height of censor marks. Default = 0.025.}
+\item{line.height}{Height of censor marks. Default = \code{0.025}.}
 
 \item{risk.table}{Logical; if \code{TRUE}, show risk table. Default = \code{TRUE}.}
 
-\item{risk.table.proportion}{Relative height of the risk table. Default = 0.2.}
+\item{risk.table.proportion}{Relative height of the risk table. Default = \code{0.2}.}
 
-\item{textsize.axis}{Axis text size. Default = 12.}
+\item{textsize.axis}{Axis text size. Default = \code{12}.}
 
-\item{textsize.legend}{Legend text size. Default = 12.}
+\item{textsize.legend}{Legend text size. Default = \code{12}.}
 
-\item{textsize.risk}{Risk table text size. Default = 12.}
+\item{textsize.risk}{Risk table text size. Default = \code{12}.}
 
-\item{title.s}{Y-axis (survival) title. Default = "Survival".}
+\item{title.s}{Y-axis (survival) title. Default = \code{"Survival"}.}
 
-\item{title.t}{X-axis (time) title. Default = "Time".}
+\item{title.t}{X-axis (time) title. Default = \code{"Time"}.}
 }
 \value{
 A \code{ggplot2} object (or \code{patchwork} composite if \code{risk.table = TRUE}).

@@ -71,30 +71,30 @@ ggKM.CI <- function(data_input, method) {
 #'
 #' Generates a Kaplan–Meier plot with optional confidence intervals and risk table.
 #' @param time Numeric vector of follow-up times.
-#' @param status Numeric event indicator (1 = event, 0 = censored).
+#' @param status Numeric event indicator (`1` = event, `0` = censored).
 #' @param group Integer vector grouping variable.
 #' @param breaks.s Y-axis (survival) tick marks. Default = `seq(0, 1, 0.25)`.
 #' @param breaks.t X-axis (time) tick marks. Default = `seq(0, max(time), by = 12)`.
-#' @param CI Integer indicating the CI type (options 2 to 4 are via the `km.ci` package):
+#' @param CI Integer indicating the CI type (options `2` to `4` are via the `km.ci` package):
 #'   \itemize{
 #'     \item \code{0}: none
 #'     \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)
 #'     \item \code{2}: pointwise CI using Rothman's binomial method² 
-#'     \item \code{3}: pointwise CI using Thomas–Grunkemeier likelihood-ratio method³
+#'     \item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method³
 #'     \item \code{4}: simultaneous confidence bands using Nair's equal precision method⁴ with log transformation 
 #'   }
-#' @param CI.alpha Alpha transparency of confidence intervals. Default = 0.2.
+#' @param CI.alpha Alpha transparency of confidence intervals. Default = `0.2`.
 #' @param colors Vector of colors. Default = `ggsci::pal_nejm()(8)`.
-#' @param grid.color Gridline color. Default = `rgb(0.95, 0.95, 0.95)`.
+#' @param grid.color Gridline color. Default = `grDevices::rgb(0.95, 0.95, 0.95)`.
 #' @param grid.s Horizontal gridline positions. Default = `seq(0, 1, 0.25)`.
 #' @param grid.t Vertical gridline positions. Default = `NULL`.
-#' @param grid.width Gridline thickness. Default = 0.5.
-#' @param legend.direction Legend orientation; either "vertical" (default) or "horizontal".
+#' @param grid.width Gridline thickness. Default = `0.5`.
+#' @param legend.direction Legend orientation; either `"vertical"` (default) or `"horizontal"`.
 #' @param legend.justification Alignment anchor for the legend relative to its
 #'   position. Can be a keyword pair such as `"left"`, `"center"`, `"right"`,
 #'   `"top"`, `"bottom"`, or a numeric vector of length 2 giving relative 
-#'   coordinates within the plot area. Default = "center"
-#' @param legend.label.position Legend label position ("left" or "right") relative to the legend symbol. Default = "left".
+#'   coordinates within the plot area. Default = `"center"`.
+#' @param legend.label.position Legend label position (`"left"` or `"right"`) relative to the legend symbol. Default = `"left"`.
 #' @param legend.labels Character vector of group labels.
 #' @param legend.ncol Integer specifying the number of columns in the legend
 #'   when `legend.direction = "vertical"`. Default = `NULL`.
@@ -103,16 +103,16 @@ ggKM.CI <- function(data_input, method) {
 #' @param legend.position Position of the legend. Can be a keyword such as 
 #'   `"none"`, `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector 
 #'   of length 2 giving relative coordinates within the plot area. Default = `c(0.9, 0.9)`.
-#' @param legend.text.align Legend text alignment: 0 = left, 0.5 = center, 1 = right. Default = 1.
-#' @param line.width Line width survival curves and censor marks. Default = 0.5.
-#' @param line.height Height of censor marks. Default = 0.025.
+#' @param legend.text.align Legend text alignment: `0` = left, `0.5` = center, `1` = right. Default = `1`.
+#' @param line.width Line width survival curves and censor marks. Default = `0.5`.
+#' @param line.height Height of censor marks. Default = `0.025`.
 #' @param risk.table Logical; if `TRUE`, show risk table. Default = `TRUE`.
-#' @param risk.table.proportion Relative height of the risk table. Default = 0.2.
-#' @param textsize.axis Axis text size. Default = 12.
-#' @param textsize.legend Legend text size. Default = 12.
-#' @param textsize.risk Risk table text size. Default = 12.
-#' @param title.s Y-axis (survival) title. Default = "Survival".
-#' @param title.t X-axis (time) title. Default = "Time".
+#' @param risk.table.proportion Relative height of the risk table. Default = `0.2`.
+#' @param textsize.axis Axis text size. Default = `12`.
+#' @param textsize.legend Legend text size. Default = `12`.
+#' @param textsize.risk Risk table text size. Default = `12`.
+#' @param title.s Y-axis (survival) title. Default = `"Survival"`.
+#' @param title.t X-axis (time) title. Default = `"Time"`.
 #' @return A `ggplot2` object (or `patchwork` composite if `risk.table = TRUE`).
 #' @references
 #' 1. Greenwood, M., 1926. A report on the natural duration of cancer. In: 

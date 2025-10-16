@@ -80,7 +80,7 @@
 
 
 <dt id="arg-status">status<a class="anchor" aria-label="anchor" href="#arg-status"></a></dt>
-<dd><p>Numeric event indicator (1 = event, 0 = censored).</p></dd>
+<dd><p>Numeric event indicator (<code>1</code> = event, <code>0</code> = censored).</p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
@@ -96,16 +96,16 @@
 
 
 <dt id="arg-ci">CI<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
-<dd><p>Integer indicating the CI type (options 2 to 4 are via the <code>km.ci</code> package):</p><ul><li><p><code>0</code>: none</p></li>
+<dd><p>Integer indicating the CI type (options <code>2</code> to <code>4</code> are via the <code>km.ci</code> package):</p><ul><li><p><code>0</code>: none</p></li>
 <li><p><code>1</code>: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)</p></li>
 <li><p><code>2</code>: pointwise CI using Rothman's binomial method²</p></li>
-<li><p><code>3</code>: pointwise CI using Thomas–Grunkemeier likelihood-ratio method³</p></li>
+<li><p><code>3</code>: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method³</p></li>
 <li><p><code>4</code>: simultaneous confidence bands using Nair's equal precision method⁴ with log transformation</p></li>
 </ul></dd>
 
 
 <dt id="arg-ci-alpha">CI.alpha<a class="anchor" aria-label="anchor" href="#arg-ci-alpha"></a></dt>
-<dd><p>Alpha transparency of confidence intervals. Default = 0.2.</p></dd>
+<dd><p>Alpha transparency of confidence intervals. Default = <code>0.2</code>.</p></dd>
 
 
 <dt id="arg-colors">colors<a class="anchor" aria-label="anchor" href="#arg-colors"></a></dt>
@@ -113,7 +113,7 @@
 
 
 <dt id="arg-grid-color">grid.color<a class="anchor" aria-label="anchor" href="#arg-grid-color"></a></dt>
-<dd><p>Gridline color. Default = <code>rgb(0.95, 0.95, 0.95)</code>.</p></dd>
+<dd><p>Gridline color. Default = <code>grDevices::rgb(0.95, 0.95, 0.95)</code>.</p></dd>
 
 
 <dt id="arg-grid-s">grid.s<a class="anchor" aria-label="anchor" href="#arg-grid-s"></a></dt>
@@ -125,22 +125,22 @@
 
 
 <dt id="arg-grid-width">grid.width<a class="anchor" aria-label="anchor" href="#arg-grid-width"></a></dt>
-<dd><p>Gridline thickness. Default = 0.5.</p></dd>
+<dd><p>Gridline thickness. Default = <code>0.5</code>.</p></dd>
 
 
 <dt id="arg-legend-direction">legend.direction<a class="anchor" aria-label="anchor" href="#arg-legend-direction"></a></dt>
-<dd><p>Legend orientation; either "vertical" (default) or "horizontal".</p></dd>
+<dd><p>Legend orientation; either <code>"vertical"</code> (default) or <code>"horizontal"</code>.</p></dd>
 
 
 <dt id="arg-legend-justification">legend.justification<a class="anchor" aria-label="anchor" href="#arg-legend-justification"></a></dt>
 <dd><p>Alignment anchor for the legend relative to its
 position. Can be a keyword pair such as <code>"left"</code>, <code>"center"</code>, <code>"right"</code>,
 <code>"top"</code>, <code>"bottom"</code>, or a numeric vector of length 2 giving relative
-coordinates within the plot area. Default = "center"</p></dd>
+coordinates within the plot area. Default = <code>"center"</code>.</p></dd>
 
 
 <dt id="arg-legend-label-position">legend.label.position<a class="anchor" aria-label="anchor" href="#arg-legend-label-position"></a></dt>
-<dd><p>Legend label position ("left" or "right") relative to the legend symbol. Default = "left".</p></dd>
+<dd><p>Legend label position (<code>"left"</code> or <code>"right"</code>) relative to the legend symbol. Default = <code>"left"</code>.</p></dd>
 
 
 <dt id="arg-legend-labels">legend.labels<a class="anchor" aria-label="anchor" href="#arg-legend-labels"></a></dt>
@@ -164,15 +164,15 @@ of length 2 giving relative coordinates within the plot area. Default = <code>c(
 
 
 <dt id="arg-legend-text-align">legend.text.align<a class="anchor" aria-label="anchor" href="#arg-legend-text-align"></a></dt>
-<dd><p>Legend text alignment: 0 = left, 0.5 = center, 1 = right. Default = 1.</p></dd>
+<dd><p>Legend text alignment: <code>0</code> = left, <code>0.5</code> = center, <code>1</code> = right. Default = <code>1</code>.</p></dd>
 
 
 <dt id="arg-line-width">line.width<a class="anchor" aria-label="anchor" href="#arg-line-width"></a></dt>
-<dd><p>Line width survival curves and censor marks. Default = 0.5.</p></dd>
+<dd><p>Line width survival curves and censor marks. Default = <code>0.5</code>.</p></dd>
 
 
 <dt id="arg-line-height">line.height<a class="anchor" aria-label="anchor" href="#arg-line-height"></a></dt>
-<dd><p>Height of censor marks. Default = 0.025.</p></dd>
+<dd><p>Height of censor marks. Default = <code>0.025</code>.</p></dd>
 
 
 <dt id="arg-risk-table">risk.table<a class="anchor" aria-label="anchor" href="#arg-risk-table"></a></dt>
@@ -180,27 +180,27 @@ of length 2 giving relative coordinates within the plot area. Default = <code>c(
 
 
 <dt id="arg-risk-table-proportion">risk.table.proportion<a class="anchor" aria-label="anchor" href="#arg-risk-table-proportion"></a></dt>
-<dd><p>Relative height of the risk table. Default = 0.2.</p></dd>
+<dd><p>Relative height of the risk table. Default = <code>0.2</code>.</p></dd>
 
 
 <dt id="arg-textsize-axis">textsize.axis<a class="anchor" aria-label="anchor" href="#arg-textsize-axis"></a></dt>
-<dd><p>Axis text size. Default = 12.</p></dd>
+<dd><p>Axis text size. Default = <code>12</code>.</p></dd>
 
 
 <dt id="arg-textsize-legend">textsize.legend<a class="anchor" aria-label="anchor" href="#arg-textsize-legend"></a></dt>
-<dd><p>Legend text size. Default = 12.</p></dd>
+<dd><p>Legend text size. Default = <code>12</code>.</p></dd>
 
 
 <dt id="arg-textsize-risk">textsize.risk<a class="anchor" aria-label="anchor" href="#arg-textsize-risk"></a></dt>
-<dd><p>Risk table text size. Default = 12.</p></dd>
+<dd><p>Risk table text size. Default = <code>12</code>.</p></dd>
 
 
 <dt id="arg-title-s">title.s<a class="anchor" aria-label="anchor" href="#arg-title-s"></a></dt>
-<dd><p>Y-axis (survival) title. Default = "Survival".</p></dd>
+<dd><p>Y-axis (survival) title. Default = <code>"Survival"</code>.</p></dd>
 
 
 <dt id="arg-title-t">title.t<a class="anchor" aria-label="anchor" href="#arg-title-t"></a></dt>
-<dd><p>X-axis (time) title. Default = "Time".</p></dd>
+<dd><p>X-axis (time) title. Default = <code>"Time"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -96,14 +96,14 @@ ggKM.CI <- function(data_input, method) {
 #' the `km.ci` package, option `4` is via the `bpcp` package):
 #'   \itemize{
 #'     \item \code{0}: none
-#'     \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)
-#'     \item \code{2}: pointwise CI using Rothman's binomial method² 
-#'     \item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method³
-#'     \item \code{4}: pointwise CI using the Fay–Brittain beta product confidence procedure⁴
-#'     \item \code{5}: simultaneous confidence bands using Nair's equal precision method⁵ with log transformation 
+#'     \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation² (default)
+#'     \item \code{2}: pointwise CI using Rothman's binomial method³ 
+#'     \item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method⁴
+#'     \item \code{4}: pointwise CI using the Fay–Brittain beta product confidence procedure⁵
+#'     \item \code{5}: simultaneous confidence bands using Nair's equal precision method⁶ with log transformation 
 #'   }
-#' @param CI.alpha Alpha transparency of confidence intervals. Default = `0.2`.
-#' @param colors Vector of colors. Default = `ggsci::pal_nejm()(8)`.
+#' @param CI.alpha Alpha transparency of the confidence intervals. Default = `0.2`.
+#' @param colors Vector of colors of the survival curves. Default = `ggsci::pal_nejm()(8)`.
 #' @param grid.color Gridline color. Default = `grDevices::rgb(0.95, 0.95, 0.95)`.
 #' @param grid.s Horizontal gridline positions. Default = `seq(0, 1, 0.25)`.
 #' @param grid.t Vertical gridline positions. Default = `NULL`.
@@ -136,16 +136,19 @@ ggKM.CI <- function(data_input, method) {
 #' 1. Greenwood, M., 1926. A report on the natural duration of cancer. In: 
 #' \emph{Reports on Public Health and Medical Subjects}, 33, pp. 1–26. London: 
 #' Her Majesty’s Stationery Office, Ministry of Health.
-#' 2. Rothman, K.J., 1978. Estimation of confidence limits for the cumulative 
+#' 2. Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007. Analyzing 
+#' survival curves at a fixed point in time. \emph{Statistics in Medicine},
+#' 26(24), pp. 4505–4519.
+#' 3. Rothman, K.J., 1978. Estimation of confidence limits for the cumulative 
 #' probability of survival in life table analysis. \emph{Journal of Chronic 
 #' Diseases}, 31(8), pp. 557–560.
-#' 3. Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation 
+#' 4. Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation 
 #' of survival probabilities for censored data. \emph{Journal of the American 
 #' Statistical Association}, 70(352), pp. 865–871.
-#' 4. Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence 
+#' 5. Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence 
 #' intervals for a survival distribution with right‐censored data.
 #' \emph{Statistics in Medicine}, 35(16), pp. 2726–2740.
-#' 5. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
+#' 6. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 #' data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
 #' @examples
 #' data <- survival::lung

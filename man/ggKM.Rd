@@ -51,16 +51,16 @@ ggKM(
 the \code{km.ci} package, option \code{4} is via the \code{bpcp} package):
 \itemize{
 \item \code{0}: none
-\item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)
-\item \code{2}: pointwise CI using Rothman's binomial method²
-\item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method³
-\item \code{4}: pointwise CI using the Fay–Brittain beta product confidence procedure⁴
-\item \code{5}: simultaneous confidence bands using Nair's equal precision method⁵ with log transformation
+\item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation² (default)
+\item \code{2}: pointwise CI using Rothman's binomial method³
+\item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method⁴
+\item \code{4}: pointwise CI using the Fay–Brittain beta product confidence procedure⁵
+\item \code{5}: simultaneous confidence bands using Nair's equal precision method⁶ with log transformation
 }}
 
-\item{CI.alpha}{Alpha transparency of confidence intervals. Default = \code{0.2}.}
+\item{CI.alpha}{Alpha transparency of the confidence intervals. Default = \code{0.2}.}
 
-\item{colors}{Vector of colors. Default = \code{ggsci::pal_nejm()(8)}.}
+\item{colors}{Vector of colors of the survival curves. Default = \code{ggsci::pal_nejm()(8)}.}
 
 \item{grid.color}{Gridline color. Default = \code{grDevices::rgb(0.95, 0.95, 0.95)}.}
 
@@ -128,6 +128,9 @@ print(g)
 \item Greenwood, M., 1926. A report on the natural duration of cancer. In:
 \emph{Reports on Public Health and Medical Subjects}, 33, pp. 1–26. London:
 Her Majesty’s Stationery Office, Ministry of Health.
+\item Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007. Analyzing
+survival curves at a fixed point in time. \emph{Statistics in Medicine},
+26(24), pp. 4505–4519.
 \item Rothman, K.J., 1978. Estimation of confidence limits for the cumulative
 probability of survival in life table analysis. \emph{Journal of Chronic
 Diseases}, 31(8), pp. 557–560.

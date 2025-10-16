@@ -98,20 +98,20 @@
 <dt id="arg-ci">CI<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Integer indicating the CI type (options <code>2</code>, <code>3</code> and <code>5</code> are via
 the <code>km.ci</code> package, option <code>4</code> is via the <code>bpcp</code> package):</p><ul><li><p><code>0</code>: none</p></li>
-<li><p><code>1</code>: pointwise CI using Greenwood's variance¹ with complementary log–log transformation (default)</p></li>
-<li><p><code>2</code>: pointwise CI using Rothman's binomial method²</p></li>
-<li><p><code>3</code>: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method³</p></li>
-<li><p><code>4</code>: pointwise CI using the Fay–Brittain beta product confidence procedure⁴</p></li>
-<li><p><code>5</code>: simultaneous confidence bands using Nair's equal precision method⁵ with log transformation</p></li>
+<li><p><code>1</code>: pointwise CI using Greenwood's variance¹ with complementary log–log transformation² (default)</p></li>
+<li><p><code>2</code>: pointwise CI using Rothman's binomial method³</p></li>
+<li><p><code>3</code>: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method⁴</p></li>
+<li><p><code>4</code>: pointwise CI using the Fay–Brittain beta product confidence procedure⁵</p></li>
+<li><p><code>5</code>: simultaneous confidence bands using Nair's equal precision method⁶ with log transformation</p></li>
 </ul></dd>
 
 
 <dt id="arg-ci-alpha">CI.alpha<a class="anchor" aria-label="anchor" href="#arg-ci-alpha"></a></dt>
-<dd><p>Alpha transparency of confidence intervals. Default = <code>0.2</code>.</p></dd>
+<dd><p>Alpha transparency of the confidence intervals. Default = <code>0.2</code>.</p></dd>
 
 
 <dt id="arg-colors">colors<a class="anchor" aria-label="anchor" href="#arg-colors"></a></dt>
-<dd><p>Vector of colors. Default = <code>ggsci::pal_nejm()(8)</code>.</p></dd>
+<dd><p>Vector of colors of the survival curves. Default = <code>ggsci::pal_nejm()(8)</code>.</p></dd>
 
 
 <dt id="arg-grid-color">grid.color<a class="anchor" aria-label="anchor" href="#arg-grid-color"></a></dt>
@@ -214,6 +214,9 @@ of length 2 giving relative coordinates within the plot area. Default = <code>c(
 <ol><li><p>Greenwood, M., 1926. A report on the natural duration of cancer. In:
 <em>Reports on Public Health and Medical Subjects</em>, 33, pp. 1–26. London:
 Her Majesty’s Stationery Office, Ministry of Health.</p></li>
+<li><p>Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007. Analyzing
+survival curves at a fixed point in time. <em>Statistics in Medicine</em>,
+26(24), pp. 4505–4519.</p></li>
 <li><p>Rothman, K.J., 1978. Estimation of confidence limits for the cumulative
 probability of survival in life table analysis. <em>Journal of Chronic
 Diseases</em>, 31(8), pp. 557–560.</p></li>

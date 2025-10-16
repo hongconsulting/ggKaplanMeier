@@ -60,12 +60,15 @@ print(g)
 2.  Greenwood, M., 1926. A report on the natural duration of cancer. In:
     *Reports on Public Health and Medical Subjects*, 33, pp. 1–26.
     London: Her Majesty’s Stationery Office, Ministry of Health.
-3.  Nair, V.N., 1984. Conﬁdence bands for survival functions with
+3.  Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007.
+    Analyzing survival curves at a fixed point in time. *Statistics in
+    Medicine*, 26(24), pp. 4505–4519.
+4.  Nair, V.N., 1984. Conﬁdence bands for survival functions with
     censored data: a comparative study. *Technometrics*, 26,
     pp. 265–275.
-4.  Rothman, K.J., 1978. Estimation of confidence limits for the
+5.  Rothman, K.J., 1978. Estimation of confidence limits for the
     cumulative probability of survival in life table analysis. *Journal
     of Chronic Diseases*, 31(8), pp. 557–560.
-5.  Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval
+6.  Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval
     estimation of survival probabilities for censored data. *Journal of
     the American Statistical Association*, 70(352), pp. 865–871.

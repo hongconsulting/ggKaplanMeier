@@ -30,16 +30,27 @@ You can install the development version of ggKaplanMeier from
 remotes::install_github("hongconsulting/ggKaplanMeier")
 ```
 
-## Example
+## Example 1
 
 ``` r
 library(ggKaplanMeier)
 data <- survival::lung
-g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)", CI= 3)
+g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex,  breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
 print(g)
 ```
 
-![](man/figures/README-example-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-2-1.png)<!-- -->
+
+## Example 2
+
+``` r
+library(ggKaplanMeier)
+data <- survival::colon
+g <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, colors = ggsci::pal_nejm()(4)[c(2, 4, 3, 1)], legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), legend.position = c(0.5, 0.1), title.s = "Overall survival", title.t = "Time (months)")
+print(g)
+```
+
+![](man/figures/README-unnamed-chunk-3-1.png)<!-- -->
 
 ## Further Reading
 

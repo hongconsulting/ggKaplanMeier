@@ -1,6 +1,6 @@
 Package: ggKaplanMeier
 Title: Kaplan-Meier plots
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: 
     person("Wei", "Hong", , "wei.hong@hongconsulting.ai", role = c("aut", "cre"))
 Description: Kaplan–Meier plots with aligned risk tables.

@@ -1,5 +1,5 @@
 #' @import patchwork
-utils::globalVariables(c("surv", "strata", "lower", "upper", "n_risk"))
+utils::globalVariables(c("fstrata", "lower", "n_risk", "surv", "strata", "upper"))
 
 ggKM.censor <- function(data_summary, data_input) {
   data_input <- data_input[data_input$status == 0,]
@@ -12,7 +12,7 @@ ggKM.censor <- function(data_summary, data_input) {
       startrow <- data.frame("time" = 0, "surv" = 1, "lower" = 1, "upper" = 1, "strata" = f)
       subdata_summary <- rbind(startrow, subdata_summary)
     }
-    output[[f]] <- data.frame(
+    output[[as.character(f)]] <- data.frame(
       "time" = subdata_input$time,
       "surv" = subdata_summary$surv[findInterval(subdata_input$time, subdata_summary$time)],
       "strata" = f)
@@ -27,6 +27,9 @@ ggKM.step <- function(data_summary, data_input) {
   for (f in factors) {
     subdata_input <- data_input[data_input$strata == f,]
     subdata_summary <- data_summary[data_summary$strata == f,]
+    # deal with NA confidence limits when surv == 0
+    subdata_summary$lower[is.na(subdata_summary$lower) & subdata_summary$surv == 0] <- 0
+    subdata_summary$upper[is.na(subdata_summary$upper) & subdata_summary$surv == 0] <- 0
     if (subdata_summary$time[1] != 0) {
       startrow <- data.frame("time" = 0, "surv" = 1, "lower" = 1, "upper" = 1, "strata" = f)
       subdata_summary <- rbind(startrow, subdata_summary)
@@ -40,7 +43,7 @@ ggKM.step <- function(data_summary, data_input) {
       "strata" = f)
     endrow <- newdata[nrow(newdata),]
     endrow$time <- max(subdata_input$time)
-    output[[f]] <- rbind(newdata, endrow)
+    output[[as.character(f)]] <- rbind(newdata, endrow)
   }
   return(do.call(rbind, output))
 }
@@ -69,9 +72,9 @@ ggKM.CI <- function(data_input, method) {
 #' Generates a Kaplan–Meier plot with optional confidence intervals and risk table.
 #' @param time Numeric vector of follow-up times.
 #' @param status Numeric event indicator (1 = event, 0 = censored).
-#' @param group Grouping variable.
+#' @param group Integer vector grouping variable.
 #' @param breaks.s Y-axis (survival) tick marks. Default = `seq(0, 1, 0.25)`.
-#' @param breaks.t X-axis (time) tick marks. Default = `seq(0, max(time), by = 6)`.
+#' @param breaks.t X-axis (time) tick marks. Default = `seq(0, max(time), by = 12)`.
 #' @param CI Integer indicating the CI type (options 2 to 4 are via the `km.ci` package):
 #'   \itemize{
 #'     \item \code{0}: none
@@ -86,9 +89,20 @@ ggKM.CI <- function(data_input, method) {
 #' @param grid.s Horizontal gridline positions. Default = `seq(0, 1, 0.25)`.
 #' @param grid.t Vertical gridline positions. Default = `NULL`.
 #' @param grid.width Gridline thickness. Default = 0.5.
+#' @param legend.direction Legend orientation; either "vertical" (default) or "horizontal".
+#' @param legend.justification Alignment anchor for the legend relative to its
+#'   position. Can be a keyword pair such as `"left"`, `"center"`, `"right"`,
+#'   `"top"`, `"bottom"`, or a numeric vector of length 2 giving relative 
+#'   coordinates within the plot area. Default = "center"
 #' @param legend.label.position Legend label position ("left" or "right") relative to the legend symbol. Default = "left".
 #' @param legend.labels Character vector of group labels.
-#' @param legend.position Legend position coordinates. Default = `c(0.9, 0.9)`.
+#' @param legend.ncol Integer specifying the number of columns in the legend
+#'   when `legend.direction = "vertical"`. Default = `NULL`.
+#' @param legend.nrow Integer specifying the number of rows in the legend
+#'   when `legend.direction = "horizontal"`. Default = `NULL`.
+#' @param legend.position Position of the legend. Can be a keyword such as 
+#'   `"none"`, `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector 
+#'   of length 2 giving relative coordinates within the plot area. Default = `c(0.9, 0.9)`.
 #' @param legend.text.align Legend text alignment: 0 = left, 0.5 = center, 1 = right. Default = 1.
 #' @param line.width Line width survival curves and censor marks. Default = 0.5.
 #' @param line.height Height of censor marks. Default = 0.025.
@@ -125,16 +139,19 @@ ggKM <- function(time, status, group,
                  colors = ggsci::pal_nejm()(8),
                  grid.color = grDevices::rgb(0.95, 0.95, 0.95),
                  grid.s = seq(0, 1, 0.25), grid.t = NULL, grid.width = 0.5,
-                 legend.label.position = "left", legend.labels = NULL,
+                 legend.direction = "vertical", legend.justification = "center",
+                 legend.label.position = "left", 
+                 legend.labels = NULL, legend.ncol = NULL, legend.nrow = NULL,
                  legend.position = c(0.9, 0.9), legend.text.align = 1,
                  line.width = 0.5, line.height = 0.025,
                  risk.table = TRUE, risk.table.proportion = 0.2,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time") {
+  group <- as.numeric(group)
   n_group <- length(unique(group))
-  if (is.null(breaks.t)) breaks.t <- seq(0, max(time), by = 6)
+  if (is.null(breaks.t)) breaks.t <- seq(0, max(time), by = 12)
   if (is.null(legend.labels)) legend.labels <- 0:(n_group - 1)
-  data_input <- data.frame("time" = time, "status" = status, "strata" = as.factor(group))
+  data_input <- data.frame("time" = time, "status" = status, "strata" = group)
   data_censor <- data_input[data_input$status == 0,]
   fit <- survival::survfit(survival::Surv(time, status) ~ strata, data = data_input, conf.type = "log-log")
   s <- summary(fit)
@@ -155,17 +172,22 @@ ggKM <- function(time, status, group,
     stop("[ggKM] invalid CI")
   }
   data_step <- ggKM.step(data_summary, data_input)
-  data_step$strata <- as.factor(data_step$strata)
+  levels_order <- sort(unique(group)) # enforce factor level order consistency
+  data_step$fstrata <- factor(data_step$strata, levels = levels_order)
   x_lim <- c(0, max(time))
-  g_KM <- ggplot2::ggplot(data_step, ggplot2::aes(time, surv, color = strata)) +
+  g_KM <- ggplot2::ggplot(data_step, ggplot2::aes(time, surv, color = fstrata, fill = fstrata)) +
     ggplot2::coord_cartesian(ylim = c(0, 1), xlim = x_lim, clip = "off") +
     ggplot2::geom_hline(yintercept = grid.s, color = grid.color, linewidth = grid.width) +
     ggplot2::geom_vline(xintercept = grid.t, color = grid.color, linewidth = grid.width) +
-    ggplot2::guides(color = ggplot2::guide_legend(label.position = legend.label.position),
-                    fill  = ggplot2::guide_legend(label.position = legend.label.position)) +
+    ggplot2::guides(color = ggplot2::guide_legend(label.position = legend.label.position, ncol = legend.ncol, nrow = legend.nrow),
+                    fill  = ggplot2::guide_legend(label.position = legend.label.position, ncol = legend.ncol, nrow = legend.nrow)) +
     ggplot2::labs(x = title.t, y = title.s, color = NULL) +
-    ggplot2::scale_color_manual(name = "", values = colors, labels = legend.labels) +
-    ggplot2::scale_fill_manual(name = "", values = colors, labels = legend.labels) +
+    ggplot2::scale_color_manual(
+      name = "",
+      values = colors,
+      labels = legend.labels,
+      aesthetics = c("color", "fill")
+    ) +
     ggplot2::scale_x_continuous(breaks = breaks.t, expand = c(0, 0)) +
     ggplot2::scale_y_continuous(breaks = breaks.s, expand = c(0, 0)) +
     ggplot2::theme_classic() +
@@ -174,25 +196,27 @@ ggKM <- function(time, status, group,
                    axis.title.x = ggplot2::element_text(size = textsize.axis),
                    legend.background = ggplot2::element_rect(fill = NA, color = NA),
                    legend.box.background = ggplot2::element_rect(fill = NA, color = NA),
+                   legend.direction = legend.direction, 
+                   legend.justification = legend.justification,
                    legend.position = legend.position,
                    legend.text = ggplot2::element_text(size = textsize.legend),
                    legend.text.align = legend.text.align)
   if (CI > 0) {
     g_KM <- g_KM +
-      ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper, fill = strata),
+      ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper, fill = fstrata),
                            alpha = CI.alpha, colour = NA)
   }
   data_censor <- ggKM.censor(data_summary, data_input)
-  data_censor$strata <- as.factor(data_censor$strata)
+  data_censor$fstrata <- factor(data_censor$strata, levels = levels_order)
   g_KM <- g_KM + ggplot2::geom_segment(
     data = data_censor,
     ggplot2::aes(x = time, xend = time,
                  y = surv - line.height/2, yend = surv + line.height/2,
-                 color = strata),
+                 color = fstrata),
     linewidth = line.width
   )
   g_KM <- g_KM + ggplot2::geom_line(linewidth = line.width)
-  if (risk.table) {
+  if (risk.table) { 
     s <- summary(fit, times = breaks.t)
     data_risk <- data.frame(
       time = s$time,

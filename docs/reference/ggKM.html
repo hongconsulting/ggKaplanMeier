@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,8 +51,12 @@
 <span>  grid.s <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.25</span><span class="op">)</span>,</span>
 <span>  grid.t <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  grid.width <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  legend.direction <span class="op">=</span> <span class="st">"vertical"</span>,</span>
+<span>  legend.justification <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>  legend.label.position <span class="op">=</span> <span class="st">"left"</span>,</span>
 <span>  legend.labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend.ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend.nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
 <span>  legend.text.align <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  line.width <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -80,7 +84,7 @@
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>Grouping variable.</p></dd>
+<dd><p>Integer vector grouping variable.</p></dd>
 
 
 <dt id="arg-breaks-s">breaks.s<a class="anchor" aria-label="anchor" href="#arg-breaks-s"></a></dt>
@@ -88,7 +92,7 @@
 
 
 <dt id="arg-breaks-t">breaks.t<a class="anchor" aria-label="anchor" href="#arg-breaks-t"></a></dt>
-<dd><p>X-axis (time) tick marks. Default = <code>seq(0, max(time), by = 6)</code>.</p></dd>
+<dd><p>X-axis (time) tick marks. Default = <code>seq(0, max(time), by = 12)</code>.</p></dd>
 
 
 <dt id="arg-ci">CI<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
@@ -124,6 +128,17 @@
 <dd><p>Gridline thickness. Default = 0.5.</p></dd>
 
 
+<dt id="arg-legend-direction">legend.direction<a class="anchor" aria-label="anchor" href="#arg-legend-direction"></a></dt>
+<dd><p>Legend orientation; either "vertical" (default) or "horizontal".</p></dd>
+
+
+<dt id="arg-legend-justification">legend.justification<a class="anchor" aria-label="anchor" href="#arg-legend-justification"></a></dt>
+<dd><p>Alignment anchor for the legend relative to its
+position. Can be a keyword pair such as <code>"left"</code>, <code>"center"</code>, <code>"right"</code>,
+<code>"top"</code>, <code>"bottom"</code>, or a numeric vector of length 2 giving relative
+coordinates within the plot area. Default = "center"</p></dd>
+
+
 <dt id="arg-legend-label-position">legend.label.position<a class="anchor" aria-label="anchor" href="#arg-legend-label-position"></a></dt>
 <dd><p>Legend label position ("left" or "right") relative to the legend symbol. Default = "left".</p></dd>
 
@@ -132,8 +147,20 @@
 <dd><p>Character vector of group labels.</p></dd>
 
 
+<dt id="arg-legend-ncol">legend.ncol<a class="anchor" aria-label="anchor" href="#arg-legend-ncol"></a></dt>
+<dd><p>Integer specifying the number of columns in the legend
+when <code>legend.direction = "vertical"</code>. Default = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-legend-nrow">legend.nrow<a class="anchor" aria-label="anchor" href="#arg-legend-nrow"></a></dt>
+<dd><p>Integer specifying the number of rows in the legend
+when <code>legend.direction = "horizontal"</code>. Default = <code>NULL</code>.</p></dd>
+
+
 <dt id="arg-legend-position">legend.position<a class="anchor" aria-label="anchor" href="#arg-legend-position"></a></dt>
-<dd><p>Legend position coordinates. Default = <code>c(0.9, 0.9)</code>.</p></dd>
+<dd><p>Position of the legend. Can be a keyword such as
+<code>"none"</code>, <code>"left"</code>, <code>"right"</code>, <code>"bottom"</code>, or <code>"top"</code>, or a numeric vector
+of length 2 giving relative coordinates within the plot area. Default = <code>c(0.9, 0.9)</code>.</p></dd>
 
 
 <dt id="arg-legend-text-align">legend.text.align<a class="anchor" aria-label="anchor" href="#arg-legend-text-align"></a></dt>

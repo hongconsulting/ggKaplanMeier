@@ -17,8 +17,12 @@ ggKM(
   grid.s = seq(0, 1, 0.25),
   grid.t = NULL,
   grid.width = 0.5,
+  legend.direction = "vertical",
+  legend.justification = "center",
   legend.label.position = "left",
   legend.labels = NULL,
+  legend.ncol = NULL,
+  legend.nrow = NULL,
   legend.position = c(0.9, 0.9),
   legend.text.align = 1,
   line.width = 0.5,
@@ -37,11 +41,11 @@ ggKM(
 
 \item{status}{Numeric event indicator (1 = event, 0 = censored).}
 
-\item{group}{Grouping variable.}
+\item{group}{Integer vector grouping variable.}
 
 \item{breaks.s}{Y-axis (survival) tick marks. Default = \code{seq(0, 1, 0.25)}.}
 
-\item{breaks.t}{X-axis (time) tick marks. Default = \code{seq(0, max(time), by = 6)}.}
+\item{breaks.t}{X-axis (time) tick marks. Default = \code{seq(0, max(time), by = 12)}.}
 
 \item{CI}{Integer indicating the CI type (options 2 to 4 are via the \code{km.ci} package):
 \itemize{
@@ -64,11 +68,26 @@ ggKM(
 
 \item{grid.width}{Gridline thickness. Default = 0.5.}
 
+\item{legend.direction}{Legend orientation; either "vertical" (default) or "horizontal".}
+
+\item{legend.justification}{Alignment anchor for the legend relative to its
+position. Can be a keyword pair such as \code{"left"}, \code{"center"}, \code{"right"},
+\code{"top"}, \code{"bottom"}, or a numeric vector of length 2 giving relative
+coordinates within the plot area. Default = "center"}
+
 \item{legend.label.position}{Legend label position ("left" or "right") relative to the legend symbol. Default = "left".}
 
 \item{legend.labels}{Character vector of group labels.}
 
-\item{legend.position}{Legend position coordinates. Default = \code{c(0.9, 0.9)}.}
+\item{legend.ncol}{Integer specifying the number of columns in the legend
+when \code{legend.direction = "vertical"}. Default = \code{NULL}.}
+
+\item{legend.nrow}{Integer specifying the number of rows in the legend
+when \code{legend.direction = "horizontal"}. Default = \code{NULL}.}
+
+\item{legend.position}{Position of the legend. Can be a keyword such as
+\code{"none"}, \code{"left"}, \code{"right"}, \code{"bottom"}, or \code{"top"}, or a numeric vector
+of length 2 giving relative coordinates within the plot area. Default = \code{c(0.9, 0.9)}.}
 
 \item{legend.text.align}{Legend text alignment: 0 = left, 0.5 = center, 1 = right. Default = 1.}
 

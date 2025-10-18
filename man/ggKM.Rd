@@ -45,22 +45,29 @@ ggKM(
 
 \item{breaks.s}{Y-axis (survival) tick marks. Default = \code{seq(0, 1, 0.25)}.}
 
-\item{breaks.t}{X-axis (time) tick marks. Default = \code{seq(0, max(time), by = 12)}.}
+\item{breaks.t}{X-axis (time) tick marks. Default =
+\code{seq(0, max(time), by = 12)}.}
 
 \item{CI}{Integer indicating the CI type (options \code{2}, \code{3} and \code{5} are via
 the \code{km.ci} package, option \code{4} is via the \code{bpcp} package):
 \itemize{
 \item \code{0}: none
-\item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation² (default)
+\item \code{1}: pointwise CI using Greenwood's variance¹ with complementary
+log–log transformation² (default)
 \item \code{2}: pointwise CI using Rothman's binomial method³
-\item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method⁴
-\item \code{4}: pointwise CI using the Fay–Brittain beta product confidence procedure⁵
-\item \code{5}: simultaneous confidence bands using Nair's equal precision method⁶ with log transformation
+\item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio
+method⁴
+\item \code{4}: pointwise CI using the Fay–Brittain beta product confidence
+procedure⁵
+\item \code{5}: simultaneous confidence bands using Nair's equal precision
+method⁶ with log transformation
 }}
 
-\item{CI.alpha}{Alpha transparency of the confidence intervals. Default = \code{0.2}.}
+\item{CI.alpha}{Alpha transparency of the confidence intervals. Default =
+\code{0.2}.}
 
-\item{colors}{Vector of colors of the survival curves. Default = \code{ggsci::pal_nejm()(8)}.}
+\item{colors}{Vector of colors of the survival curves. Default =
+\code{ggsci::pal_nejm()(8)}.}
 
 \item{grid.color}{Gridline color. Default = \code{grDevices::rgb(0.95, 0.95, 0.95)}.}
 
@@ -70,27 +77,33 @@ the \code{km.ci} package, option \code{4} is via the \code{bpcp} package):
 
 \item{grid.width}{Gridline thickness. Default = \code{0.5}.}
 
-\item{legend.direction}{Legend orientation; either \code{"vertical"} (default) or \code{"horizontal"}.}
+\item{legend.direction}{Legend orientation; either \code{"vertical"} (default) or
+\code{"horizontal"}.}
 
 \item{legend.justification}{Alignment anchor for the legend relative to its
-position. Can be a single keyword (e.g., \code{"center"}), a keyword pair specifying
-horizontal and vertical justification (e.g., \code{c("left", "top")}, \code{c("right", "bottom")})
-respectively, or a numeric vector of length 2 giving relative coordinates
-within the plot area. Default = \code{"center"}.}
+position. Can be a single keyword (e.g., \code{"center"}), a keyword pair
+specifying horizontal and vertical justification (e.g., \code{c("left", "top")},
+\code{c("right", "bottom")}) respectively, or a numeric vector of length 2 giving
+relative coordinates within the plot area. Default = \code{"center"}.}
 
-\item{legend.label.position}{Legend label position (\code{"left"} or \code{"right"}) relative to the legend symbol. Default = \code{"left"}.}
+\item{legend.label.position}{Legend label position (\code{"left"} or \code{"right"})
+relative to the legend symbol. Default = \code{"left"}.}
 
 \item{legend.labels}{Character vector of group labels.}
 
-\item{legend.ncol}{Integer specifying the number of columns in the legend. Default = \code{NULL}.}
+\item{legend.ncol}{Integer specifying the number of columns in the legend.
+Default = \code{NULL}.}
 
-\item{legend.nrow}{Integer specifying the number of rows in the legend. Default = \code{NULL}.}
+\item{legend.nrow}{Integer specifying the number of rows in the legend.
+Default = \code{NULL}.}
 
 \item{legend.position}{Position of the legend. Can be a keyword such as
 \code{"none"}, \code{"left"}, \code{"right"}, \code{"bottom"}, or \code{"top"}, or a numeric vector
-of length 2 giving relative coordinates within the plot area. Default = \code{c(0.9, 0.9)}.}
+of length 2 giving relative coordinates within the plot area. Default =
+\code{c(0.9, 0.9)}.}
 
-\item{legend.text.align}{Legend text alignment: \code{0} = left, \code{0.5} = center, \code{1} = right. Default = \code{1}.}
+\item{legend.text.align}{Legend text alignment: \code{0} = left, \code{0.5} = center,
+\code{1} = right. Default = \code{1}.}
 
 \item{line.width}{Line width survival curves and censor marks. Default = \code{0.5}.}
 
@@ -98,7 +111,8 @@ of length 2 giving relative coordinates within the plot area. Default = \code{c(
 
 \item{risk.table}{Logical; if \code{TRUE}, show risk table. Default = \code{TRUE}.}
 
-\item{risk.table.proportion}{Relative height of the risk table. Default = \code{0.2}.}
+\item{risk.table.proportion}{Relative height of the risk table. Default =
+\code{0.2}.}
 
 \item{textsize.axis}{Axis text size. Default = \code{12}.}
 
@@ -114,7 +128,8 @@ of length 2 giving relative coordinates within the plot area. Default = \code{c(
 A \code{ggplot2} object (or \code{patchwork} composite if \code{risk.table = TRUE}).
 }
 \description{
-Generates a Kaplan–Meier plot with optional confidence intervals and risk table.
+Generates a Kaplan–Meier plot with optional confidence intervals and risk
+table.
 }
 \examples{
 data <- survival::lung
@@ -129,17 +144,17 @@ print(g)
 \emph{Reports on Public Health and Medical Subjects}, 33, pp. 1–26. London:
 Her Majesty’s Stationery Office, Ministry of Health.
 \item Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007. Analyzing
-survival curves at a fixed point in time. \emph{Statistics in Medicine},
-26(24), pp. 4505–4519.
+survival curves at a fixed point in time. \emph{Statistics in Medicine}, 26(24),
+pp. 4505–4519.
 \item Rothman, K.J., 1978. Estimation of confidence limits for the cumulative
-probability of survival in life table analysis. \emph{Journal of Chronic
-Diseases}, 31(8), pp. 557–560.
+probability of survival in life table analysis. \emph{Journal of Chronic Diseases},
+31(8), pp. 557–560.
 \item Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation
 of survival probabilities for censored data. \emph{Journal of the American
 Statistical Association}, 70(352), pp. 865–871.
 \item Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence
-intervals for a survival distribution with right‐censored data.
-\emph{Statistics in Medicine}, 35(16), pp. 2726–2740.
+intervals for a survival distribution with right‐censored data. \emph{Statistics
+in Medicine}, 35(16), pp. 2726–2740.
 \item Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
 }

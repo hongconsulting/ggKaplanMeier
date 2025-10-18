@@ -86,46 +86,61 @@ ggKM.CI <- function(data_input, method) {
 
 #' Kaplan–Meier plot
 #'
-#' Generates a Kaplan–Meier plot with optional confidence intervals and risk table.
+#' Generates a Kaplan–Meier plot with optional confidence intervals and risk 
+#' table.
 #' @param time Numeric vector of follow-up times.
 #' @param status Numeric event indicator (`1` = event, `0` = censored).
 #' @param group Integer vector grouping variable.
 #' @param breaks.s Y-axis (survival) tick marks. Default = `seq(0, 1, 0.25)`.
-#' @param breaks.t X-axis (time) tick marks. Default = `seq(0, max(time), by = 12)`.
+#' @param breaks.t X-axis (time) tick marks. Default = 
+#' `seq(0, max(time), by = 12)`.
 #' @param CI Integer indicating the CI type (options `2`, `3` and `5` are via 
 #' the `km.ci` package, option `4` is via the `bpcp` package):
 #'   \itemize{
-#'     \item \code{0}: none
-#'     \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary log–log transformation² (default)
-#'     \item \code{2}: pointwise CI using Rothman's binomial method³ 
-#'     \item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio method⁴
-#'     \item \code{4}: pointwise CI using the Fay–Brittain beta product confidence procedure⁵
-#'     \item \code{5}: simultaneous confidence bands using Nair's equal precision method⁶ with log transformation 
+#'     \item `0`: none
+#'     \item `1`: pointwise CI using Greenwood's variance¹ with complementary 
+#'     log–log transformation² (default)
+#'     \item `2`: pointwise CI using Rothman's binomial method³ 
+#'     \item `3`: pointwise CI using the Thomas–Grunkemeier likelihood-ratio 
+#'     method⁴
+#'     \item `4`: pointwise CI using the Fay–Brittain beta product confidence 
+#'     procedure⁵
+#'     \item `5`: simultaneous confidence bands using Nair's equal precision 
+#'     method⁶ with log transformation 
 #'   }
-#' @param CI.alpha Alpha transparency of the confidence intervals. Default = `0.2`.
-#' @param colors Vector of colors of the survival curves. Default = `ggsci::pal_nejm()(8)`.
+#' @param CI.alpha Alpha transparency of the confidence intervals. Default = 
+#' `0.2`.
+#' @param colors Vector of colors of the survival curves. Default = 
+#' `ggsci::pal_nejm()(8)`.
 #' @param grid.color Gridline color. Default = `grDevices::rgb(0.95, 0.95, 0.95)`.
 #' @param grid.s Horizontal gridline positions. Default = `seq(0, 1, 0.25)`.
 #' @param grid.t Vertical gridline positions. Default = `NULL`.
 #' @param grid.width Gridline thickness. Default = `0.5`.
-#' @param legend.direction Legend orientation; either `"vertical"` (default) or `"horizontal"`.
-#' @param legend.justification Alignment anchor for the legend relative to its
-#'   position. Can be a single keyword (e.g., `"center"`), a keyword pair specifying
-#'   horizontal and vertical justification (e.g., `c("left", "top")`, `c("right", "bottom")`) 
-#'   respectively, or a numeric vector of length 2 giving relative coordinates 
-#'   within the plot area. Default = `"center"`.
-#' @param legend.label.position Legend label position (`"left"` or `"right"`) relative to the legend symbol. Default = `"left"`.
+#' @param legend.direction Legend orientation; either `"vertical"` (default) or 
+#' `"horizontal"`.
+#' @param legend.justification Alignment anchor for the legend relative to its 
+#' position. Can be a single keyword (e.g., `"center"`), a keyword pair 
+#' specifying horizontal and vertical justification (e.g., `c("left", "top")`, 
+#' `c("right", "bottom")`) respectively, or a numeric vector of length 2 giving 
+#' relative coordinates within the plot area. Default = `"center"`.
+#' @param legend.label.position Legend label position (`"left"` or `"right"`) 
+#' relative to the legend symbol. Default = `"left"`.
 #' @param legend.labels Character vector of group labels.
-#' @param legend.ncol Integer specifying the number of columns in the legend. Default = `NULL`.
-#' @param legend.nrow Integer specifying the number of rows in the legend. Default = `NULL`.
+#' @param legend.ncol Integer specifying the number of columns in the legend. 
+#' Default = `NULL`.
+#' @param legend.nrow Integer specifying the number of rows in the legend. 
+#' Default = `NULL`.
 #' @param legend.position Position of the legend. Can be a keyword such as 
-#'   `"none"`, `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector 
-#'   of length 2 giving relative coordinates within the plot area. Default = `c(0.9, 0.9)`.
-#' @param legend.text.align Legend text alignment: `0` = left, `0.5` = center, `1` = right. Default = `1`.
+#' `"none"`, `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector 
+#' of length 2 giving relative coordinates within the plot area. Default = 
+#' `c(0.9, 0.9)`.
+#' @param legend.text.align Legend text alignment: `0` = left, `0.5` = center, 
+#' `1` = right. Default = `1`.
 #' @param line.width Line width survival curves and censor marks. Default = `0.5`.
 #' @param line.height Height of censor marks. Default = `0.025`.
 #' @param risk.table Logical; if `TRUE`, show risk table. Default = `TRUE`.
-#' @param risk.table.proportion Relative height of the risk table. Default = `0.2`.
+#' @param risk.table.proportion Relative height of the risk table. Default = 
+#' `0.2`.
 #' @param textsize.axis Axis text size. Default = `12`.
 #' @param textsize.legend Legend text size. Default = `12`.
 #' @param textsize.risk Risk table text size. Default = `12`.
@@ -134,22 +149,22 @@ ggKM.CI <- function(data_input, method) {
 #' @return A `ggplot2` object (or `patchwork` composite if `risk.table = TRUE`).
 #' @references
 #' 1. Greenwood, M., 1926. A report on the natural duration of cancer. In: 
-#' \emph{Reports on Public Health and Medical Subjects}, 33, pp. 1–26. London: 
+#' *Reports on Public Health and Medical Subjects*, 33, pp. 1–26. London: 
 #' Her Majesty’s Stationery Office, Ministry of Health.
 #' 2. Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007. Analyzing 
-#' survival curves at a fixed point in time. \emph{Statistics in Medicine},
-#' 26(24), pp. 4505–4519.
+#' survival curves at a fixed point in time. *Statistics in Medicine*, 26(24), 
+#' pp. 4505–4519.
 #' 3. Rothman, K.J., 1978. Estimation of confidence limits for the cumulative 
-#' probability of survival in life table analysis. \emph{Journal of Chronic 
-#' Diseases}, 31(8), pp. 557–560.
+#' probability of survival in life table analysis. *Journal of Chronic Diseases*,
+#' 31(8), pp. 557–560.
 #' 4. Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation 
-#' of survival probabilities for censored data. \emph{Journal of the American 
-#' Statistical Association}, 70(352), pp. 865–871.
+#' of survival probabilities for censored data. *Journal of the American 
+#' Statistical Association*, 70(352), pp. 865–871.
 #' 5. Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence 
-#' intervals for a survival distribution with right‐censored data.
-#' \emph{Statistics in Medicine}, 35(16), pp. 2726–2740.
+#' intervals for a survival distribution with right‐censored data. *Statistics 
+#' in Medicine*, 35(16), pp. 2726–2740.
 #' 6. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
-#' data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
+#' data: a comparative study. *Technometrics*, 26, pp. 265–275.
 #' @examples
 #' data <- survival::lung
 #' g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 

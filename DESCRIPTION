@@ -3,7 +3,8 @@ Title: Kaplan-Meier plots
 Version: 0.8.0
 Authors@R: 
     person("Wei", "Hong", , "wei.hong@hongconsulting.ai", role = c("aut", "cre"))
-Description: Kaplan–Meier plots with aligned risk tables.
+Description: Kaplan–Meier plots using the 'ggplot2' package, with an overall 
+    Stata-like style.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

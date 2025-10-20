@@ -20,7 +20,7 @@ ggKM.censor <- function(data_summary, data_input) {
   return(do.call(rbind, output))
 }
 
-ggKM.step <- function(data_summary, data_input) {
+ggKM.step <- function(data_summary, data_input, t_max = Inf) {
   factors <- unique(data_summary$strata)
   output <- list()
   i <- 0
@@ -41,9 +41,13 @@ ggKM.step <- function(data_summary, data_input) {
       "lower" = rep(subdata_summary$lower, each = 2)[-end],
       "upper" = rep(subdata_summary$upper, each = 2)[-end],
       "strata" = f)
-    endrow <- newdata[nrow(newdata),]
-    endrow$time <- max(subdata_input$time)
-    output[[as.character(f)]] <- rbind(newdata, endrow)
+    if (max(subdata_summary$time) < max(subdata_input$time)) {
+      endrow <- newdata[nrow(newdata),]
+      endrow$time <- max(subdata_input$time)
+      output[[as.character(f)]] <- rbind(newdata, endrow)
+    } else {
+      output[[as.character(f)]] <- newdata
+    }
   }
   return(do.call(rbind, output))
 }
@@ -65,20 +69,28 @@ ggKM.BPCP <- function(data_input, method) {
   return(do.call(rbind, output))
 }
 
-ggKM.CI <- function(data_input, method) {
-  if (!requireNamespace("km.ci", quietly = TRUE)) stop("[ggKM.CI] requires package 'km.ci'")
+ggKM.WH <- function(data_input, method) {
+  if (!requireNamespace("WHKMconf", quietly = TRUE)) stop("[ggKM.WH] requires package 'WHKMconf'")
   factors <- unique(data_input$strata)
   output <- list()
   for (f in factors) {
     subdata_input <- data_input[data_input$strata == f,]
-    fit0 <- survival::survfit(survival::Surv(time, status) ~ 1, data = subdata_input)
-    fit <- km.ci::km.ci(fit0, conf.level = 0.95, tl = NA, tu = NA, method = method)
+    fit <- survival::survfit(survival::Surv(time, status) ~ 1, data = subdata_input)
     summary <- summary(fit)
+    if (method == "Rothman") {
+      CI <- WHKMconf::WH_Rothman(summary$surv, summary$n.risk, summary$n.event)
+    } else if (method == "TG") {
+      CI <- WHKMconf::WH_ThomasGrunkemeier(summary$time, summary$n.risk, summary$n.event)
+    } else if (method == "Nair") {
+      CI <- WHKMconf::WH_Nair(summary$time, summary$surv, summary$std.err, summary$n.risk, summary$n.event)
+    } else if (method == "HM") {
+      CI <- WHKMconf::WH_HollanderMcKeague(summary$time, summary$n.risk, summary$n.event)
+    } else stop("[ggKM.WH] invalid method")
     output[[as.character(f)]] <- data.frame(
       "time" = summary$time,
       "surv" = summary$surv,
-      "lower" = summary$lower,
-      "upper" = summary$upper,
+      "lower" = CI[, 1],
+      "upper" = CI[, 2],
       "strata" = f)
   }
   return(do.call(rbind, output))
@@ -94,8 +106,8 @@ ggKM.CI <- function(data_input, method) {
 #' @param breaks.s Y-axis (survival) tick marks. Default = `seq(0, 1, 0.25)`.
 #' @param breaks.t X-axis (time) tick marks. Default = 
 #' `seq(0, max(time), by = 12)`.
-#' @param CI Integer indicating the CI type (options `2`, `3` and `5` are via 
-#' the `km.ci` package, option `4` is via the `bpcp` package):
+#' @param CI Integer indicating the CI type (options `2`, `3`, `5`, and `6` are via 
+#' the `WHKMconf` package, option `4` is via the `bpcp` package):
 #'   \itemize{
 #'     \item `0`: none
 #'     \item `1`: pointwise CI using Greenwood's variance¹ with complementary 
@@ -105,8 +117,10 @@ ggKM.CI <- function(data_input, method) {
 #'     method⁴
 #'     \item `4`: pointwise CI using the Fay–Brittain beta product confidence 
 #'     procedure⁵
-#'     \item `5`: simultaneous confidence bands using Nair's equal precision 
-#'     method⁶ with log transformation 
+#'     \item `5`: simultaneous confidence bands using Nair's log-transformed 
+#'     equal precision method⁶  
+#'     \item `6`: simultaneous confidence bands using the Hollander–McKeague 
+#'     likelihood-ratio method⁷
 #'   }
 #' @param CI.alpha Alpha transparency of the confidence intervals. Default = 
 #' `0.2`.
@@ -165,6 +179,9 @@ ggKM.CI <- function(data_input, method) {
 #' in Medicine*, 35(16), pp. 2726–2740.
 #' 6. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 #' data: a comparative study. *Technometrics*, 26, pp. 265–275.
+#' 7. Hollander, M. and McKeague, I.W., 1997. Likelihood ratio-based confidence 
+#' bands for survival functions. *Journal of the American Statistical 
+#' Association*, 92(437), pp. 215–226.
 #' @examples
 #' data <- survival::lung
 #' g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 
@@ -202,16 +219,16 @@ ggKM <- function(time, status, group,
   if (CI == 0 | CI == 1) {
     data_summary <- data.frame(s[c("time", "surv", "lower", "upper", "strata")])
   } else if (CI == 2) {
-    data_summary <- ggKM.CI(data_input, "rothman")
+    data_summary <- ggKM.WH(data_input, "Rothman")
   } else if (CI == 3) {
-    data_summary <- ggKM.CI(data_input, "grunkemeier")
+    data_summary <- ggKM.WH(data_input, "TG")
   } else if (CI == 4) {
     data_summary <- ggKM.BPCP(data_input)
   } else if (CI == 5) {
-    data_summary <- ggKM.CI(data_input, "logep")
-  } else {
-    stop("[ggKM] invalid CI")
-  }
+    data_summary <- ggKM.WH(data_input, "Nair")
+  } else if (CI == 6) {
+    data_summary <- ggKM.WH(data_input, "HM")
+  } else stop("[ggKM] invalid CI")
   data_step <- ggKM.step(data_summary, data_input)
   levels_order <- sort(unique(group)) # enforce factor level order consistency
   data_step$fstrata <- factor(data_step$strata, levels = levels_order)

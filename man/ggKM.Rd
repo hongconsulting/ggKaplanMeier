@@ -48,8 +48,8 @@ ggKM(
 \item{breaks.t}{X-axis (time) tick marks. Default =
 \code{seq(0, max(time), by = 12)}.}
 
-\item{CI}{Integer indicating the CI type (options \code{2}, \code{3} and \code{5} are via
-the \code{km.ci} package, option \code{4} is via the \code{bpcp} package):
+\item{CI}{Integer indicating the CI type (options \code{2}, \code{3}, \code{5}, and \code{6} are via
+the \code{WHKMconf} package, option \code{4} is via the \code{bpcp} package):
 \itemize{
 \item \code{0}: none
 \item \code{1}: pointwise CI using Greenwood's variance¹ with complementary
@@ -59,8 +59,10 @@ log–log transformation² (default)
 method⁴
 \item \code{4}: pointwise CI using the Fay–Brittain beta product confidence
 procedure⁵
-\item \code{5}: simultaneous confidence bands using Nair's equal precision
-method⁶ with log transformation
+\item \code{5}: simultaneous confidence bands using Nair's log-transformed
+equal precision method⁶
+\item \code{6}: simultaneous confidence bands using the Hollander–McKeague
+likelihood-ratio method⁷
 }}
 
 \item{CI.alpha}{Alpha transparency of the confidence intervals. Default =
@@ -157,5 +159,8 @@ intervals for a survival distribution with right‐censored data. \emph{Statisti
 in Medicine}, 35(16), pp. 2726–2740.
 \item Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
+\item Hollander, M. and McKeague, I.W., 1997. Likelihood ratio-based confidence
+bands for survival functions. \emph{Journal of the American Statistical
+Association}, 92(437), pp. 215–226.
 }
 }

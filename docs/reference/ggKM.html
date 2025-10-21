@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,10 +44,10 @@ table.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggKM</span><span class="op">(</span></span>
 <span>  <span class="va">time</span>,</span>
 <span>  <span class="va">status</span>,</span>
-<span>  <span class="va">group</span>,</span>
+<span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  breaks.s <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.25</span><span class="op">)</span>,</span>
 <span>  breaks.t <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  CI <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  CI <span class="op">=</span> <span class="st">"cloglog"</span>,</span>
 <span>  CI.alpha <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  colors <span class="op">=</span> <span class="op">(</span><span class="fu">ggsci</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/ggsci/reference/pal_nejm.html" class="external-link">pal_nejm</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>,</span>
 <span>  grid.color <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">0.95</span>, <span class="fl">0.95</span>, <span class="fl">0.95</span><span class="op">)</span>,</span>
@@ -87,7 +87,7 @@ table.</p>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>Integer vector grouping variable.</p></dd>
+<dd><p>Optional integer vector grouping variable.</p></dd>
 
 
 <dt id="arg-breaks-s">breaks.s<a class="anchor" aria-label="anchor" href="#arg-breaks-s"></a></dt>
@@ -100,19 +100,24 @@ table.</p>
 
 
 <dt id="arg-ci">CI<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
-<dd><p>Integer indicating the CI type (options <code>2</code>, <code>3</code>, <code>5</code>, and <code>6</code> are via
-the <code>WHKMconf</code> package, option <code>4</code> is via the <code>bpcp</code> package):</p><ul><li><p><code>0</code>: none</p></li>
-<li><p><code>1</code>: pointwise CI using Greenwood's variance¹ with complementary
-log–log transformation² (default)</p></li>
-<li><p><code>2</code>: pointwise CI using Rothman's binomial method³</p></li>
-<li><p><code>3</code>: pointwise CI using the Thomas–Grunkemeier likelihood-ratio
-method⁴</p></li>
-<li><p><code>4</code>: pointwise CI using the Fay–Brittain beta product confidence
-procedure⁵</p></li>
-<li><p><code>5</code>: simultaneous confidence bands using Nair's log-transformed
-equal precision method⁶</p></li>
-<li><p><code>6</code>: simultaneous confidence bands using the Hollander–McKeague
-likelihood-ratio method⁷</p></li>
+<dd><p>String indicating the CI type:</p><ul><li><p><code>"none"</code>: none</p></li>
+<li><p>Pointwise confidence intervals:</p><ul><li><p><code>"cloglog"</code> (default): pointwise CI using Greenwood's variance¹
+with complementary log–log transformation²</p></li>
+<li><p><code>"modcloglog"</code>: <code>"cloglog"</code> with the lower confidence limit
+modified according to the effective sample size at each censored
+observation³</p></li>
+<li><p><code>"Rothman"</code>: pointwise CI using Rothman's binomial method⁴ (via
+the <code>WHKMconf</code> package)</p></li>
+<li><p><code>"TG"</code>: pointwise CI using the Thomas–Grunkemeier
+likelihood-ratio method⁵ (via the <code>WHKMconf</code> package)</p></li>
+<li><p><code>"BPCP"</code>: pointwise CI using the beta product confidence
+procedure⁶ (via the <code>"bpcp"</code> package)</p></li>
+</ul></li>
+<li><p>Simultaneous confidence bands:</p><ul><li><p><code>"Nair"</code>: simultaneous confidence bands using Nair's
+log-transformed equal precision method⁷ (via the <code>WHKMconf</code> package)</p></li>
+<li><p><code>"HM"</code>: simultaneous confidence bands using the
+Hollander–McKeague likelihood-ratio method⁸ (via the <code>WHKMconf</code> package)</p></li>
+</ul></li>
 </ul></dd>
 
 
@@ -178,7 +183,7 @@ Default = <code>NULL</code>.</p></dd>
 <dd><p>Position of the legend. Can be a keyword such as
 <code>"none"</code>, <code>"left"</code>, <code>"right"</code>, <code>"bottom"</code>, or <code>"top"</code>, or a numeric vector
 of length 2 giving relative coordinates within the plot area. Default =
-<code>c(0.9, 0.9)</code>.</p></dd>
+<code>c(0.9, 0.9)</code>. Set to <code>"none"</code> if <code>group</code> is <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-legend-text-align">legend.text.align<a class="anchor" aria-label="anchor" href="#arg-legend-text-align"></a></dt>
@@ -236,15 +241,18 @@ Her Majesty’s Stationery Office, Ministry of Health.</p></li>
 <li><p>Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007. Analyzing
 survival curves at a fixed point in time. <em>Statistics in Medicine</em>, 26(24),
 pp. 4505–4519.</p></li>
+<li><p>Dorey, F.J. and Korn, E.L., 1987. Effective sample sizes for confidence
+intervals for survival probabilities. <em>Statistics in Medicine</em>, 6(6), pp.
+679–687.</p></li>
 <li><p>Rothman, K.J., 1978. Estimation of confidence limits for the cumulative
 probability of survival in life table analysis. <em>Journal of Chronic Diseases</em>,
 31(8), pp. 557–560.</p></li>
 <li><p>Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation
 of survival probabilities for censored data. <em>Journal of the American
 Statistical Association</em>, 70(352), pp. 865–871.</p></li>
-<li><p>Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence
-intervals for a survival distribution with right‐censored data. <em>Statistics
-in Medicine</em>, 35(16), pp. 2726–2740.</p></li>
+<li><p>Fay, M.P., Brittain, E.H. and Proschan, M.A., 2013. Pointwise confidence
+intervals for a survival distribution with small samples or heavy censoring.
+<em>Biostatistics</em>, 14(4), pp. 723–736.</p></li>
 <li><p>Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 data: a comparative study. <em>Technometrics</em>, 26, pp. 265–275.</p></li>
 <li><p>Hollander, M. and McKeague, I.W., 1997. Likelihood ratio-based confidence

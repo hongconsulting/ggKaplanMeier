@@ -69,6 +69,19 @@ ggKM.BPCP <- function(data_input, method) {
   return(do.call(rbind, output))
 }
 
+ggKM.LOCF <- function(x) {
+  n <- length(x)
+  if (n == 0) return(x)
+  if (is.na(x[1])) return(x)
+  for (i in 2:n) {
+    if (is.na(x[i])) {
+      x[i] <- x[i - 1]
+      break
+    }
+  }
+  return(x)
+}
+
 ggKM.WH <- function(data_input, method) {
   if (!requireNamespace("WHKMconf", quietly = TRUE)) stop("[ggKM.WH] requires package 'WHKMconf'")
   factors <- unique(data_input$strata)
@@ -96,31 +109,42 @@ ggKM.WH <- function(data_input, method) {
   return(do.call(rbind, output))
 }
 
+################################################################################
+
 #' Kaplan–Meier plot
 #'
 #' Generates a Kaplan–Meier plot with optional confidence intervals and risk 
 #' table.
 #' @param time Numeric vector of follow-up times.
 #' @param status Numeric event indicator (`1` = event, `0` = censored).
-#' @param group Integer vector grouping variable.
+#' @param group Optional integer vector grouping variable.
 #' @param breaks.s Y-axis (survival) tick marks. Default = `seq(0, 1, 0.25)`.
 #' @param breaks.t X-axis (time) tick marks. Default = 
 #' `seq(0, max(time), by = 12)`.
-#' @param CI Integer indicating the CI type (options `2`, `3`, `5`, and `6` are via 
-#' the `WHKMconf` package, option `4` is via the `bpcp` package):
+#' @param CI String indicating the CI type:
 #'   \itemize{
-#'     \item `0`: none
-#'     \item `1`: pointwise CI using Greenwood's variance¹ with complementary 
-#'     log–log transformation² (default)
-#'     \item `2`: pointwise CI using Rothman's binomial method³ 
-#'     \item `3`: pointwise CI using the Thomas–Grunkemeier likelihood-ratio 
-#'     method⁴
-#'     \item `4`: pointwise CI using the Fay–Brittain beta product confidence 
-#'     procedure⁵
-#'     \item `5`: simultaneous confidence bands using Nair's log-transformed 
-#'     equal precision method⁶  
-#'     \item `6`: simultaneous confidence bands using the Hollander–McKeague 
-#'     likelihood-ratio method⁷
+#'     \item `"none"`: none
+#'     \item Pointwise confidence intervals:
+#'     \itemize{
+#'       \item `"cloglog"` (default): pointwise CI using Greenwood's variance¹ 
+#'       with complementary log–log transformation² 
+#'       \item `"modcloglog"`: `"cloglog"` with the lower confidence limit 
+#'       modified according to the effective sample size at each censored 
+#'       observation³
+#'       \item `"Rothman"`: pointwise CI using Rothman's binomial method⁴ (via 
+#'       the `WHKMconf` package)
+#'       \item `"TG"`: pointwise CI using the Thomas–Grunkemeier 
+#'       likelihood-ratio method⁵ (via the `WHKMconf` package)
+#'       \item `"BPCP"`: pointwise CI using the beta product confidence 
+#'       procedure⁶ (via the `"bpcp"` package)
+#'     }
+#'     \item Simultaneous confidence bands:
+#'     \itemize{
+#'       \item `"Nair"`: simultaneous confidence bands using Nair's 
+#'       log-transformed equal precision method⁷ (via the `WHKMconf` package)
+#'       \item `"HM"`: simultaneous confidence bands using the 
+#'       Hollander–McKeague likelihood-ratio method⁸ (via the `WHKMconf` package)
+#'     }
 #'   }
 #' @param CI.alpha Alpha transparency of the confidence intervals. Default = 
 #' `0.2`.
@@ -147,7 +171,7 @@ ggKM.WH <- function(data_input, method) {
 #' @param legend.position Position of the legend. Can be a keyword such as 
 #' `"none"`, `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector 
 #' of length 2 giving relative coordinates within the plot area. Default = 
-#' `c(0.9, 0.9)`.
+#' `c(0.9, 0.9)`. Set to `"none"` if `group` is `NULL`.
 #' @param legend.text.align Legend text alignment: `0` = left, `0.5` = center, 
 #' `1` = right. Default = `1`.
 #' @param line.width Line width survival curves and censor marks. Default = `0.5`.
@@ -168,18 +192,21 @@ ggKM.WH <- function(data_input, method) {
 #' 2. Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007. Analyzing 
 #' survival curves at a fixed point in time. *Statistics in Medicine*, 26(24), 
 #' pp. 4505–4519.
-#' 3. Rothman, K.J., 1978. Estimation of confidence limits for the cumulative 
+#' 3. Dorey, F.J. and Korn, E.L., 1987. Effective sample sizes for confidence 
+#' intervals for survival probabilities. *Statistics in Medicine*, 6(6), pp. 
+#' 679–687.
+#' 4. Rothman, K.J., 1978. Estimation of confidence limits for the cumulative 
 #' probability of survival in life table analysis. *Journal of Chronic Diseases*,
 #' 31(8), pp. 557–560.
-#' 4. Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation 
+#' 5. Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation 
 #' of survival probabilities for censored data. *Journal of the American 
 #' Statistical Association*, 70(352), pp. 865–871.
-#' 5. Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence 
-#' intervals for a survival distribution with right‐censored data. *Statistics 
-#' in Medicine*, 35(16), pp. 2726–2740.
-#' 6. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
+#' 6. Fay, M.P., Brittain, E.H. and Proschan, M.A., 2013. Pointwise confidence 
+#' intervals for a survival distribution with small samples or heavy censoring. 
+#' *Biostatistics*, 14(4), pp. 723–736.
+#' 7. Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 #' data: a comparative study. *Technometrics*, 26, pp. 265–275.
-#' 7. Hollander, M. and McKeague, I.W., 1997. Likelihood ratio-based confidence 
+#' 8. Hollander, M. and McKeague, I.W., 1997. Likelihood ratio-based confidence 
 #' bands for survival functions. *Journal of the American Statistical 
 #' Association*, 92(437), pp. 215–226.
 #' @examples
@@ -189,9 +216,9 @@ ggKM.WH <- function(data_input, method) {
 #'           title.s = "Overall survival", title.t = "Time (months)")
 #' print(g)
 #' @export
-ggKM <- function(time, status, group,
+ggKM <- function(time, status, group = NULL,
                  breaks.s = seq(0, 1, 0.25), breaks.t = NULL,
-                 CI = 1, CI.alpha = 0.2,
+                 CI = "cloglog", CI.alpha = 0.2,
                  colors = ggsci::pal_nejm()(8),
                  grid.color = grDevices::rgb(0.95, 0.95, 0.95),
                  grid.s = seq(0, 1, 0.25), grid.t = NULL, grid.width = 0.5,
@@ -203,35 +230,47 @@ ggKM <- function(time, status, group,
                  risk.table = TRUE, risk.table.proportion = 0.2,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time") {
+  if (is.null(group)) group <- rep(1, length(time))
   group <- as.numeric(group)
   n_group <- length(unique(group))
+  if (n_group == 1) legend.position = "none"
   if (is.null(breaks.t)) breaks.t <- seq(0, max(time), by = 12)
   if (is.null(legend.labels)) legend.labels <- 0:(n_group - 1)
   data_input <- data.frame("time" = time, "status" = status, "strata" = group)
   data_censor <- data_input[data_input$status == 0,]
-  fit <- survival::survfit(survival::Surv(time, status) ~ strata, data = data_input, conf.type = "log-log")
-  s <- summary(fit)
-  if (is.null(s$strata)) {
-    s$strata <- rep(0, length(s$time))
+  if (CI == "modcloglog") {
+    fit <- survival::survfit(survival::Surv(time, status) ~ strata, 
+                             data = data_input, conf.type = "log-log", 
+                             conf.lower = "modified")
+    s <- data.frame("time" = fit$time, "surv" = fit$surv, "lower" = fit$lower, "upper" = fit$upper)
+    if (n_group == 1) {
+      s$strata <- 1
+    } else {
+      x <- as.numeric(fit$strata)
+      s$strata <- rep(seq_along(x), times = x)
+    }
   } else {
-    s$strata <- as.numeric(sub("strata=", "", s$strata))
+    fit <- survival::survfit(survival::Surv(time, status) ~ strata, 
+                             data = data_input, conf.type = "log-log", 
+                             conf.lower = "usual")
+    s <- summary(fit)
+    if (n_group == 1) {
+      s$strata <- rep(1, length(s$time))
+    } else {
+      s$strata <- as.numeric(sub("strata=", "", s$strata))
+    }
   }
-  if (CI == 0 | CI == 1) {
+  if (CI == "cloglog" | CI == "modcloglog" | CI == "none") {
     data_summary <- data.frame(s[c("time", "surv", "lower", "upper", "strata")])
-  } else if (CI == 2) {
-    data_summary <- ggKM.WH(data_input, "Rothman")
-  } else if (CI == 3) {
-    data_summary <- ggKM.WH(data_input, "TG")
-  } else if (CI == 4) {
+  } else if (CI == "HM" | CI == "Nair" | CI == "TG" | CI == "Rothman") {
+    data_summary <- ggKM.WH(data_input, CI)
+  } else if (CI == "BPCP") {
     data_summary <- ggKM.BPCP(data_input)
-  } else if (CI == 5) {
-    data_summary <- ggKM.WH(data_input, "Nair")
-  } else if (CI == 6) {
-    data_summary <- ggKM.WH(data_input, "HM")
   } else stop("[ggKM] invalid CI")
   data_step <- ggKM.step(data_summary, data_input)
   levels_order <- sort(unique(group)) # enforce factor level order consistency
   data_step$fstrata <- factor(data_step$strata, levels = levels_order)
+  data_pruned <- data_step[!is.na(data_step$lower),]
   x_lim <- c(0, max(time))
   g_KM <- ggplot2::ggplot(data_step, ggplot2::aes(time, surv, color = fstrata, fill = fstrata)) +
     ggplot2::coord_cartesian(ylim = c(0, 1), xlim = x_lim, clip = "off") +
@@ -261,7 +300,7 @@ ggKM <- function(time, status, group,
                    legend.text.align = legend.text.align)
   if (CI > 0) {
     g_KM <- g_KM +
-      ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper, fill = fstrata),
+      ggplot2::geom_ribbon(data = data_pruned, ggplot2::aes(ymin = lower, ymax = upper, fill = fstrata),
                            alpha = CI.alpha, colour = NA)
   }
   data_censor <- ggKM.censor(data_summary, data_input)
@@ -281,13 +320,15 @@ ggKM <- function(time, status, group,
       strata = NA,
       n_risk = s$n.risk
     )
-    if (length(unique(s$strata)) > 1) {
+    if (n_group > 1) {
       data_risk$strata <- as.factor(as.numeric(sub("strata=", "", s$strata)))      
+      data_risk <- rbind(data.frame(time = 0, strata = "At risk:", n_risk = ""), data_risk)
+      data_risk$strata <- as.factor(data_risk$strata)
+      data_risk$strata <- stats::relevel(data_risk$strata, "At risk:")
+      levels(data_risk$strata) <- c("At risk:", legend.labels)
+    } else {
+      data_risk$strata <- "At risk:"
     }
-    data_risk <- rbind(data.frame(time = 0, strata = "At risk:", n_risk = ""), data_risk)
-    data_risk$strata <- as.factor(data_risk$strata)
-    data_risk$strata <- stats::relevel(data_risk$strata, "At risk:")
-    levels(data_risk$strata) <- c("At risk:", legend.labels)
     g_risk <- ggplot2::ggplot(data_risk, ggplot2::aes(time, strata, label = n_risk)) +
       ggplot2::coord_cartesian(xlim = x_lim, clip = "off") +
       ggplot2::geom_text(size = textsize.risk * 127/360) +

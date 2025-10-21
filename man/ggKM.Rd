@@ -7,10 +7,10 @@
 ggKM(
   time,
   status,
-  group,
+  group = NULL,
   breaks.s = seq(0, 1, 0.25),
   breaks.t = NULL,
-  CI = 1,
+  CI = "cloglog",
   CI.alpha = 0.2,
   colors = (ggsci::pal_nejm())(8),
   grid.color = grDevices::rgb(0.95, 0.95, 0.95),
@@ -41,28 +41,37 @@ ggKM(
 
 \item{status}{Numeric event indicator (\code{1} = event, \code{0} = censored).}
 
-\item{group}{Integer vector grouping variable.}
+\item{group}{Optional integer vector grouping variable.}
 
 \item{breaks.s}{Y-axis (survival) tick marks. Default = \code{seq(0, 1, 0.25)}.}
 
 \item{breaks.t}{X-axis (time) tick marks. Default =
 \code{seq(0, max(time), by = 12)}.}
 
-\item{CI}{Integer indicating the CI type (options \code{2}, \code{3}, \code{5}, and \code{6} are via
-the \code{WHKMconf} package, option \code{4} is via the \code{bpcp} package):
+\item{CI}{String indicating the CI type:
 \itemize{
-\item \code{0}: none
-\item \code{1}: pointwise CI using Greenwood's variance¹ with complementary
-log–log transformation² (default)
-\item \code{2}: pointwise CI using Rothman's binomial method³
-\item \code{3}: pointwise CI using the Thomas–Grunkemeier likelihood-ratio
-method⁴
-\item \code{4}: pointwise CI using the Fay–Brittain beta product confidence
-procedure⁵
-\item \code{5}: simultaneous confidence bands using Nair's log-transformed
-equal precision method⁶
-\item \code{6}: simultaneous confidence bands using the Hollander–McKeague
-likelihood-ratio method⁷
+\item \code{"none"}: none
+\item Pointwise confidence intervals:
+\itemize{
+\item \code{"cloglog"} (default): pointwise CI using Greenwood's variance¹
+with complementary log–log transformation²
+\item \code{"modcloglog"}: \code{"cloglog"} with the lower confidence limit
+modified according to the effective sample size at each censored
+observation³
+\item \code{"Rothman"}: pointwise CI using Rothman's binomial method⁴ (via
+the \code{WHKMconf} package)
+\item \code{"TG"}: pointwise CI using the Thomas–Grunkemeier
+likelihood-ratio method⁵ (via the \code{WHKMconf} package)
+\item \code{"BPCP"}: pointwise CI using the beta product confidence
+procedure⁶ (via the \code{"bpcp"} package)
+}
+\item Simultaneous confidence bands:
+\itemize{
+\item \code{"Nair"}: simultaneous confidence bands using Nair's
+log-transformed equal precision method⁷ (via the \code{WHKMconf} package)
+\item \code{"HM"}: simultaneous confidence bands using the
+Hollander–McKeague likelihood-ratio method⁸ (via the \code{WHKMconf} package)
+}
 }}
 
 \item{CI.alpha}{Alpha transparency of the confidence intervals. Default =
@@ -102,7 +111,7 @@ Default = \code{NULL}.}
 \item{legend.position}{Position of the legend. Can be a keyword such as
 \code{"none"}, \code{"left"}, \code{"right"}, \code{"bottom"}, or \code{"top"}, or a numeric vector
 of length 2 giving relative coordinates within the plot area. Default =
-\code{c(0.9, 0.9)}.}
+\code{c(0.9, 0.9)}. Set to \code{"none"} if \code{group} is \code{NULL}.}
 
 \item{legend.text.align}{Legend text alignment: \code{0} = left, \code{0.5} = center,
 \code{1} = right. Default = \code{1}.}
@@ -148,15 +157,18 @@ Her Majesty’s Stationery Office, Ministry of Health.
 \item Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007. Analyzing
 survival curves at a fixed point in time. \emph{Statistics in Medicine}, 26(24),
 pp. 4505–4519.
+\item Dorey, F.J. and Korn, E.L., 1987. Effective sample sizes for confidence
+intervals for survival probabilities. \emph{Statistics in Medicine}, 6(6), pp.
+679–687.
 \item Rothman, K.J., 1978. Estimation of confidence limits for the cumulative
 probability of survival in life table analysis. \emph{Journal of Chronic Diseases},
 31(8), pp. 557–560.
 \item Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval estimation
 of survival probabilities for censored data. \emph{Journal of the American
 Statistical Association}, 70(352), pp. 865–871.
-\item Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise confidence
-intervals for a survival distribution with right‐censored data. \emph{Statistics
-in Medicine}, 35(16), pp. 2726–2740.
+\item Fay, M.P., Brittain, E.H. and Proschan, M.A., 2013. Pointwise confidence
+intervals for a survival distribution with small samples or heavy censoring.
+\emph{Biostatistics}, 14(4), pp. 723–736.
 \item Nair, V.N., 1984. Conﬁdence bands for survival functions with censored
 data: a comparative study. \emph{Technometrics}, 26, pp. 265–275.
 \item Hollander, M. and McKeague, I.W., 1997. Likelihood ratio-based confidence

@@ -10,8 +10,9 @@ Kaplan–Meier plots using the `ggplot2` package, with an overall
 Stata-like style. Differences compared to `survminer::ggsurvplot()`
 include:
 
-- Transparent confidence interval areas are always drawn behind survival
-  curves and never over them.
+- Transparent pointwise confidence interval and simultaneous confidence
+  band areas are always drawn behind survival curves and never over
+  them.
 
 - Censor marks are drawn as customizable line segments instead of point
   symbols.
@@ -35,43 +36,53 @@ remotes::install_github("hongconsulting/ggKaplanMeier")
 ``` r
 library(ggKaplanMeier)
 data <- survival::lung
-g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
-print(g)
+fig1a <- ggKM(data$time * 12 / 365.2425, data$status - 1, breaks.t = seq(0, 30, 6), colors = ggsci::pal_nejm()(4)[4], title.s = "Overall survival", title.t = "Time (months)")
+print(fig1a)
 ```
 
-![](man/figures/README-unnamed-chunk-2-1.png)<!-- -->
+![](man/figures/README-example_1-1.png)<!-- -->
+
+``` r
+fig1b <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
+print(fig1b)
+```
+
+![](man/figures/README-example_1-2.png)<!-- -->
 
 ## Example 2
 
 ``` r
 library(ggKaplanMeier)
 data <- survival::colon
-g <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, colors = ggsci::pal_nejm()(4)[c(2, 4, 3, 1)], legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), legend.position = c(0.5, 0.1), title.s = "Overall survival", title.t = "Time (months)")
-print(g)
+fig1 <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, colors = ggsci::pal_nejm()(4)[c(2, 4, 3, 1)], legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), legend.position = c(0.5, 0.1), title.s = "Overall survival", title.t = "Time (months)")
+print(fig1)
 ```
 
-![](man/figures/README-unnamed-chunk-3-1.png)<!-- -->
+![](man/figures/README-example_2-1.png)<!-- -->
 
 ## Further Reading
 
-1.  Fay, M.P. and Brittain, E.H., 2016. Finite sample pointwise
-    confidence intervals for a survival distribution with right‐censored
-    data. *Statistics in Medicine*, 35(16), pp. 2726–2740.
-2.  Greenwood, M., 1926. A report on the natural duration of cancer. In:
+1.  Dorey, F.J. and Korn, E.L., 1987. Effective sample sizes for
+    confidence intervals for survival probabilities. *Statistics in
+    Medicine*, 6(6), pp. 679–687.
+2.  Fay, M.P., Brittain, E.H. and Proschan, M.A., 2013. Pointwise
+    confidence intervals for a survival distribution with small samples
+    or heavy censoring. *Biostatistics*, 14(4), pp. 723–736.
+3.  Greenwood, M., 1926. A report on the natural duration of cancer. In:
     *Reports on Public Health and Medical Subjects*, 33, pp. 1–26.
     London: Her Majesty’s Stationery Office, Ministry of Health.
-3.  Hollander, M. and McKeague, I.W., 1997. Likelihood ratio-based
+4.  Hollander, M. and McKeague, I.W., 1997. Likelihood ratio-based
     confidence bands for survival functions. *Journal of the American
     Statistical Association*, 92(437), pp. 215–226.
-4.  Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007.
+5.  Klein, J.P., Logan, B., Harhoff, M. and Andersen, P.K., 2007.
     Analyzing survival curves at a fixed point in time. *Statistics in
     Medicine*, 26(24), pp. 4505–4519.
-5.  Nair, V.N., 1984. Conﬁdence bands for survival functions with
+6.  Nair, V.N., 1984. Conﬁdence bands for survival functions with
     censored data: a comparative study. *Technometrics*, 26,
     pp. 265–275.
-6.  Rothman, K.J., 1978. Estimation of confidence limits for the
+7.  Rothman, K.J., 1978. Estimation of confidence limits for the
     cumulative probability of survival in life table analysis. *Journal
     of Chronic Diseases*, 31(8), pp. 557–560.
-7.  Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval
+8.  Thomas, D.R. and Grunkemeier, G.L., 1975. Confidence interval
     estimation of survival probabilities for censored data. *Journal of
     the American Statistical Association*, 70(352), pp. 865–871.

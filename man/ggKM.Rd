@@ -18,17 +18,18 @@ ggKM(
   grid.t = NULL,
   grid.width = 0.5,
   legend.direction = "vertical",
-  legend.justification = "center",
-  legend.label.position = "left",
+  legend.just = "center",
+  legend.label.pos = "left",
   legend.labels = NULL,
   legend.ncol = NULL,
   legend.nrow = NULL,
-  legend.position = c(0.9, 0.9),
+  legend.pos = c(0.9, 0.9),
   legend.text.align = 1,
   line.width = 0.5,
   line.height = 0.025,
   risk.table = TRUE,
-  risk.table.proportion = 0.2,
+  risk.table.margin = 16,
+  risk.table.prop = 0.2,
   textsize.axis = 12,
   textsize.legend = 12,
   textsize.risk = 12,
@@ -91,13 +92,13 @@ Hollander–McKeague likelihood-ratio method⁸ (via the \code{WHKMconf} package
 \item{legend.direction}{Legend orientation; either \code{"vertical"} (default) or
 \code{"horizontal"}.}
 
-\item{legend.justification}{Alignment anchor for the legend relative to its
-position. Can be a single keyword (e.g., \code{"center"}), a keyword pair
-specifying horizontal and vertical justification (e.g., \code{c("left", "top")},
+\item{legend.just}{Alignment anchor for the legend relative to its position.
+Can be a single keyword (e.g., \code{"center"}), a keyword pair specifying
+horizontal and vertical justification (e.g., \code{c("left", "top")},
 \code{c("right", "bottom")}) respectively, or a numeric vector of length 2 giving
 relative coordinates within the plot area. Default = \code{"center"}.}
 
-\item{legend.label.position}{Legend label position (\code{"left"} or \code{"right"})
+\item{legend.label.pos}{Legend label position (\code{"left"} or \code{"right"})
 relative to the legend symbol. Default = \code{"left"}.}
 
 \item{legend.labels}{Character vector of group labels.}
@@ -108,10 +109,10 @@ Default = \code{NULL}.}
 \item{legend.nrow}{Integer specifying the number of rows in the legend.
 Default = \code{NULL}.}
 
-\item{legend.position}{Position of the legend. Can be a keyword such as
-\code{"none"}, \code{"left"}, \code{"right"}, \code{"bottom"}, or \code{"top"}, or a numeric vector
-of length 2 giving relative coordinates within the plot area. Default =
-\code{c(0.9, 0.9)}. Set to \code{"none"} if \code{group} is \code{NULL}.}
+\item{legend.pos}{Position of the legend. Can be a keyword such as \code{"none"},
+\code{"left"}, \code{"right"}, \code{"bottom"}, or \code{"top"}, or a numeric vector of length 2
+giving relative coordinates within the plot area. Default = \code{c(0.9, 0.9)}.
+Set to \code{"none"} if \code{group} is \code{NULL}.}
 
 \item{legend.text.align}{Legend text alignment: \code{0} = left, \code{0.5} = center,
 \code{1} = right. Default = \code{1}.}
@@ -122,8 +123,10 @@ of length 2 giving relative coordinates within the plot area. Default =
 
 \item{risk.table}{Logical; if \code{TRUE}, show risk table. Default = \code{TRUE}.}
 
-\item{risk.table.proportion}{Relative height of the risk table. Default =
-\code{0.2}.}
+\item{risk.table.margin}{Numeric value specifying the horizontal spacing
+between the risk table labels and the risk table. Default = \code{16}.}
+
+\item{risk.table.prop}{Relative height of the risk table. Default = \code{0.2}.}
 
 \item{textsize.axis}{Axis text size. Default = \code{12}.}
 

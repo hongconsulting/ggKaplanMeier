@@ -31,7 +31,7 @@ You can install the development version of ggKaplanMeier from
 remotes::install_github("hongconsulting/ggKaplanMeier")
 ```
 
-## Example: North Central Cancer Treatment Group (NCCTG) lung cancer data
+## Example: North Central Cancer Treatment Group lung cancer data
 
 ``` r
 library(ggKaplanMeier)
@@ -54,7 +54,7 @@ print(fig1b)
 ``` r
 library(ggKaplanMeier)
 data <- survival::colon
-fig1 <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, colors = ggsci::pal_nejm()(4)[c(2, 4, 3, 1)], legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), legend.position = c(0.5, 0.1), title.s = "Overall survival", title.t = "Time (months)")
+fig1 <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, colors = ggsci::pal_nejm()(4)[c(2, 4, 3, 1)], legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), legend.pos = c(0.5, 0.1), risk.table.margin = 20, title.s = "Overall survival", title.t = "Time (months)")
 print(fig1)
 ```
 

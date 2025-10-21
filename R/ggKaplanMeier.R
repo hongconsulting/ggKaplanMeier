@@ -156,29 +156,30 @@ ggKM.WH <- function(data_input, method) {
 #' @param grid.width Gridline thickness. Default = `0.5`.
 #' @param legend.direction Legend orientation; either `"vertical"` (default) or 
 #' `"horizontal"`.
-#' @param legend.justification Alignment anchor for the legend relative to its 
-#' position. Can be a single keyword (e.g., `"center"`), a keyword pair 
-#' specifying horizontal and vertical justification (e.g., `c("left", "top")`, 
+#' @param legend.just Alignment anchor for the legend relative to its position. 
+#' Can be a single keyword (e.g., `"center"`), a keyword pair specifying 
+#' horizontal and vertical justification (e.g., `c("left", "top")`, 
 #' `c("right", "bottom")`) respectively, or a numeric vector of length 2 giving 
 #' relative coordinates within the plot area. Default = `"center"`.
-#' @param legend.label.position Legend label position (`"left"` or `"right"`) 
+#' @param legend.label.pos Legend label position (`"left"` or `"right"`) 
 #' relative to the legend symbol. Default = `"left"`.
 #' @param legend.labels Character vector of group labels.
 #' @param legend.ncol Integer specifying the number of columns in the legend. 
 #' Default = `NULL`.
 #' @param legend.nrow Integer specifying the number of rows in the legend. 
 #' Default = `NULL`.
-#' @param legend.position Position of the legend. Can be a keyword such as 
-#' `"none"`, `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector 
-#' of length 2 giving relative coordinates within the plot area. Default = 
-#' `c(0.9, 0.9)`. Set to `"none"` if `group` is `NULL`.
+#' @param legend.pos Position of the legend. Can be a keyword such as `"none"`, 
+#' `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector of length 2 
+#' giving relative coordinates within the plot area. Default = `c(0.9, 0.9)`. 
+#' Set to `"none"` if `group` is `NULL`.
 #' @param legend.text.align Legend text alignment: `0` = left, `0.5` = center, 
 #' `1` = right. Default = `1`.
 #' @param line.width Line width survival curves and censor marks. Default = `0.5`.
 #' @param line.height Height of censor marks. Default = `0.025`.
 #' @param risk.table Logical; if `TRUE`, show risk table. Default = `TRUE`.
-#' @param risk.table.proportion Relative height of the risk table. Default = 
-#' `0.2`.
+#' @param risk.table.margin Numeric value specifying the horizontal spacing 
+#' between the risk table labels and the risk table. Default = `16`.
+#' @param risk.table.prop Relative height of the risk table. Default = `0.2`.
 #' @param textsize.axis Axis text size. Default = `12`.
 #' @param textsize.legend Legend text size. Default = `12`.
 #' @param textsize.risk Risk table text size. Default = `12`.
@@ -222,18 +223,18 @@ ggKM <- function(time, status, group = NULL,
                  colors = ggsci::pal_nejm()(8),
                  grid.color = grDevices::rgb(0.95, 0.95, 0.95),
                  grid.s = seq(0, 1, 0.25), grid.t = NULL, grid.width = 0.5,
-                 legend.direction = "vertical", legend.justification = "center",
-                 legend.label.position = "left", 
+                 legend.direction = "vertical", legend.just = "center",
+                 legend.label.pos = "left", 
                  legend.labels = NULL, legend.ncol = NULL, legend.nrow = NULL,
-                 legend.position = c(0.9, 0.9), legend.text.align = 1,
+                 legend.pos = c(0.9, 0.9), legend.text.align = 1,
                  line.width = 0.5, line.height = 0.025,
-                 risk.table = TRUE, risk.table.proportion = 0.2,
+                 risk.table = TRUE, risk.table.margin = 16, risk.table.prop = 0.2,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time") {
   if (is.null(group)) group <- rep(1, length(time))
   group <- as.numeric(group)
   n_group <- length(unique(group))
-  if (n_group == 1) legend.position = "none"
+  if (n_group == 1) legend.pos = "none"
   if (is.null(breaks.t)) breaks.t <- seq(0, max(time), by = 12)
   if (is.null(legend.labels)) legend.labels <- 0:(n_group - 1)
   data_input <- data.frame("time" = time, "status" = status, "strata" = group)
@@ -276,8 +277,8 @@ ggKM <- function(time, status, group = NULL,
     ggplot2::coord_cartesian(ylim = c(0, 1), xlim = x_lim, clip = "off") +
     ggplot2::geom_hline(yintercept = grid.s, color = grid.color, linewidth = grid.width) +
     ggplot2::geom_vline(xintercept = grid.t, color = grid.color, linewidth = grid.width) +
-    ggplot2::guides(color = ggplot2::guide_legend(label.position = legend.label.position, ncol = legend.ncol, nrow = legend.nrow),
-                    fill  = ggplot2::guide_legend(label.position = legend.label.position, ncol = legend.ncol, nrow = legend.nrow)) +
+    ggplot2::guides(color = ggplot2::guide_legend(label.position = legend.label.pos, ncol = legend.ncol, nrow = legend.nrow),
+                    fill  = ggplot2::guide_legend(label.position = legend.label.pos, ncol = legend.ncol, nrow = legend.nrow)) +
     ggplot2::labs(x = title.t, y = title.s, color = NULL) +
     ggplot2::scale_color_manual(
       name = "",
@@ -294,8 +295,8 @@ ggKM <- function(time, status, group = NULL,
                    legend.background = ggplot2::element_rect(fill = NA, color = NA),
                    legend.box.background = ggplot2::element_rect(fill = NA, color = NA),
                    legend.direction = legend.direction, 
-                   legend.justification = legend.justification,
-                   legend.position = legend.position,
+                   legend.justification = legend.just,
+                   legend.position = legend.pos,
                    legend.text = ggplot2::element_text(size = textsize.legend),
                    legend.text.align = legend.text.align)
   if (CI > 0) {
@@ -338,7 +339,8 @@ ggKM <- function(time, status, group = NULL,
       ggplot2::theme(
         axis.line = ggplot2::element_blank(),
         axis.text.x = ggplot2::element_blank(),
-        axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 16), size = textsize.risk),
+        axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = risk.table.margin), 
+                                            size = textsize.risk),
         axis.ticks = ggplot2::element_blank(),
         axis.title = ggplot2::element_blank(),
         panel.grid = ggplot2::element_blank(),
@@ -357,7 +359,7 @@ ggKM <- function(time, status, group = NULL,
         )
       )
     g <- g_KM / g_risk +
-      patchwork::plot_layout(heights = c(((1 - risk.table.proportion) / risk.table.proportion), 1))
+      patchwork::plot_layout(heights = c(((1 - risk.table.prop) / risk.table.prop), 1))
   }
   return(g)
 }

@@ -35,7 +35,7 @@ You can install the development version of ggKaplanMeier from [GitHub](https://g
 remotes::install_github("hongconsulting/ggKaplanMeier")
 ```
 
-## Example 1
+## Example: North Central Cancer Treatment Group (NCCTG) lung cancer data
 
 ```{r example_1}
 library(ggKaplanMeier)
@@ -46,7 +46,7 @@ fig1b <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, breaks.t = s
 print(fig1b)
 ```
 
-## Example 2
+## Example: Dukes stage B/C colon cancer study
 
 ```{r example_2}
 library(ggKaplanMeier)

@@ -136,7 +136,7 @@ ggKM.WH <- function(data_input, method) {
 #'       \item `"TG"`: pointwise CI using the Thomas–Grunkemeier 
 #'       likelihood-ratio method⁵ (via the `WHKMconf` package)
 #'       \item `"BPCP"`: pointwise CI using the beta product confidence 
-#'       procedure⁶ (via the `"bpcp"` package)
+#'       procedure⁶ (via the `bpcp` package)
 #'     }
 #'     \item Simultaneous confidence bands:
 #'     \itemize{

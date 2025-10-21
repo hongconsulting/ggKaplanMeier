@@ -63,7 +63,7 @@ the \code{WHKMconf} package)
 \item \code{"TG"}: pointwise CI using the Thomas–Grunkemeier
 likelihood-ratio method⁵ (via the \code{WHKMconf} package)
 \item \code{"BPCP"}: pointwise CI using the beta product confidence
-procedure⁶ (via the \code{"bpcp"} package)
+procedure⁶ (via the \code{bpcp} package)
 }
 \item Simultaneous confidence bands:
 \itemize{

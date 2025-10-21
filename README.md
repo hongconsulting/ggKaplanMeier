@@ -31,7 +31,7 @@ You can install the development version of ggKaplanMeier from
 remotes::install_github("hongconsulting/ggKaplanMeier")
 ```
 
-## Example 1
+## Example: North Central Cancer Treatment Group (NCCTG) lung cancer data
 
 ``` r
 library(ggKaplanMeier)
@@ -49,7 +49,7 @@ print(fig1b)
 
 ![](man/figures/README-example_1-2.png)<!-- -->
 
-## Example 2
+## Example: Dukes stage B/C colon cancer study
 
 ``` r
 library(ggKaplanMeier)

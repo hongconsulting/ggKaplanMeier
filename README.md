@@ -31,7 +31,7 @@ You can install the development version of ggKaplanMeier from
 remotes::install_github("hongconsulting/ggKaplanMeier")
 ```
 
-## Example: North Central Cancer Treatment Group lung cancer data
+## Example: NCCTG lung cancer data
 
 ``` r
 library(ggKaplanMeier)

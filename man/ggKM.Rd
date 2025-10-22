@@ -54,24 +54,24 @@ ggKM(
 \item \code{"none"}: none
 \item Pointwise confidence intervals:
 \itemize{
-\item \code{"cloglog"} (default): pointwise CI using Greenwood's variance¹
-with complementary log–log transformation²
+\item \code{"cloglog"} (default): Greenwood's variance¹ with complementary
+log–log transformation²
 \item \code{"modcloglog"}: \code{"cloglog"} with the lower confidence limit
 modified according to the effective sample size at each censored
 observation³
-\item \code{"Rothman"}: pointwise CI using Rothman's binomial method⁴ (via
-the \code{WHKMconf} package)
-\item \code{"TG"}: pointwise CI using the Thomas–Grunkemeier
-likelihood-ratio method⁵ (via the \code{WHKMconf} package)
-\item \code{"BPCP"}: pointwise CI using the beta product confidence
-procedure⁶ (via the \code{bpcp} package)
+\item \code{"Rothman"}: Rothman's binomial method⁴ (via the \code{WHKMconf}
+package)
+\item \code{"TG"}: Thomas–Grunkemeier likelihood-ratio method⁵ (via the
+\code{WHKMconf} package)
+\item \code{"BPCP"}: beta product confidence procedure⁶ (via the \code{bpcp}
+package)
 }
 \item Simultaneous confidence bands:
 \itemize{
-\item \code{"Nair"}: simultaneous confidence bands using Nair's
-log-transformed equal precision method⁷ (via the \code{WHKMconf} package)
-\item \code{"HM"}: simultaneous confidence bands using the
-Hollander–McKeague likelihood-ratio method⁸ (via the \code{WHKMconf} package)
+\item \code{"Nair"}: Nair's log-transformed equal precision method⁷ (via the
+\code{WHKMconf} package)
+\item \code{"HM"}: Hollander–McKeague likelihood-ratio method⁸ (via the
+\code{WHKMconf} package)
 }
 }}
 

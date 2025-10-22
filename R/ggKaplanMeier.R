@@ -126,24 +126,24 @@ ggKM.WH <- function(data_input, method) {
 #'     \item `"none"`: none
 #'     \item Pointwise confidence intervals:
 #'     \itemize{
-#'       \item `"cloglog"` (default): pointwise CI using Greenwood's variance¹ 
-#'       with complementary log–log transformation² 
+#'       \item `"cloglog"` (default): Greenwood's variance¹ with complementary 
+#'       log–log transformation² 
 #'       \item `"modcloglog"`: `"cloglog"` with the lower confidence limit 
 #'       modified according to the effective sample size at each censored 
 #'       observation³
-#'       \item `"Rothman"`: pointwise CI using Rothman's binomial method⁴ (via 
-#'       the `WHKMconf` package)
-#'       \item `"TG"`: pointwise CI using the Thomas–Grunkemeier 
-#'       likelihood-ratio method⁵ (via the `WHKMconf` package)
-#'       \item `"BPCP"`: pointwise CI using the beta product confidence 
-#'       procedure⁶ (via the `bpcp` package)
+#'       \item `"Rothman"`: Rothman's binomial method⁴ (via the `WHKMconf` 
+#'       package)
+#'       \item `"TG"`: Thomas–Grunkemeier likelihood-ratio method⁵ (via the 
+#'       `WHKMconf` package)
+#'       \item `"BPCP"`: beta product confidence procedure⁶ (via the `bpcp` 
+#'       package)
 #'     }
 #'     \item Simultaneous confidence bands:
 #'     \itemize{
-#'       \item `"Nair"`: simultaneous confidence bands using Nair's 
-#'       log-transformed equal precision method⁷ (via the `WHKMconf` package)
-#'       \item `"HM"`: simultaneous confidence bands using the 
-#'       Hollander–McKeague likelihood-ratio method⁸ (via the `WHKMconf` package)
+#'       \item `"Nair"`: Nair's log-transformed equal precision method⁷ (via the 
+#'       `WHKMconf` package)
+#'       \item `"HM"`: Hollander–McKeague likelihood-ratio method⁸ (via the 
+#'       `WHKMconf` package)
 #'     }
 #'   }
 #' @param CI.alpha Alpha transparency of the confidence intervals. Default = 

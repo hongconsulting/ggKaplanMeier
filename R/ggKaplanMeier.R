@@ -185,7 +185,7 @@ ggKM.WH <- function(data_input, method) {
 #' @param textsize.risk Risk table text size. Default = `12`.
 #' @param title.s Y-axis (survival) title. Default = `"Survival"`.
 #' @param title.t X-axis (time) title. Default = `"Time"`.
-#' @return A `ggplot2` object (or `patchwork` composite if `risk.table = TRUE`).
+#' @return A `ggplot` (+ `patchwork` if `risk.table` = `TRUE`) object.
 #' @references
 #' 1. Greenwood, M., 1926. A report on the natural duration of cancer. In: 
 #' *Reports on Public Health and Medical Subjects*, 33, pp. 1–26. London: 

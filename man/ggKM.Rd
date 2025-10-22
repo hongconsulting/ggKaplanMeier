@@ -139,7 +139,7 @@ between the risk table labels and the risk table. Default = \code{16}.}
 \item{title.t}{X-axis (time) title. Default = \code{"Time"}.}
 }
 \value{
-A \code{ggplot2} object (or \code{patchwork} composite if \code{risk.table = TRUE}).
+A \code{ggplot} (+ \code{patchwork} if \code{risk.table} = \code{TRUE}) object.
 }
 \description{
 Generates a Kaplan–Meier plot with optional confidence intervals and risk

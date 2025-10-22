@@ -67,7 +67,7 @@ library(ggKaplanMeier)
 data <- survival::lung
 f.custom <- function() {
   fit <- survival::survfit(survival::Surv(.time, .status) ~ 1, 
-                           conf.type = "arcsin")
+                           conf.type = "plain")
   return(data.frame("time" = fit$time, "surv" = fit$surv, 
                     "lower" = fit$lower, "upper" = fit$upper))
 }

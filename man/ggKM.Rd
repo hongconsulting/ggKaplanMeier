@@ -40,7 +40,7 @@ ggKM(
 \arguments{
 \item{time}{Numeric vector of follow-up times.}
 
-\item{status}{Numeric event indicator (\code{1} = event, \code{0} = censored).}
+\item{status}{Integer vector event indicator (\code{1} = event, \code{0} = censored).}
 
 \item{group}{Optional integer vector grouping variable.}
 
@@ -49,7 +49,7 @@ ggKM(
 \item{breaks.t}{X-axis (time) tick marks. Default =
 \code{seq(0, max(time), by = 12)}.}
 
-\item{CI}{String indicating the CI type:
+\item{CI}{String indicating the CI type (or a custom function; see Details):
 \itemize{
 \item \code{"none"}: none
 \item Pointwise confidence intervals:
@@ -145,12 +145,39 @@ A \code{ggplot} (+ \code{patchwork} if \code{risk.table} = \code{TRUE}) object.
 Generates a Kaplan–Meier plot with optional confidence intervals and risk
 table.
 }
+\details{
+A custom function passed to \code{CI} is called once per \code{group} in an environment
+containing the following variables:
+\itemize{
+\item \code{.time}: Numeric vector of follow-up times for the current \code{group}
+\item \code{.status}: Integer vector event indicator (\code{1} = event, \code{0} =
+censored) for the current \code{group}
+}
+The custom function must return a \code{data.frame} with the following columns:
+\itemize{
+\item \verb{$time}: unique event times
+\item \verb{$surv}: survival estimate
+\item \verb{$lower}: lower confidence limit
+\item \verb{$upper}: upper confidence limit
+}
+}
 \examples{
 data <- survival::lung
-g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 
-          breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"),
-          title.s = "Overall survival", title.t = "Time (months)")
-print(g)
+fig1a <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 
+              breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"),
+              title.s = "Overall survival", title.t = "Time (months)")
+print(fig1a)
+f.custom <- function() {
+  fit <- survival::survfit(survival::Surv(.time, .status) ~ 1,  
+                           conf.type = "logit")
+  return(data.frame("time" = fit$time, "surv" = fit$surv, 
+                    "lower" = fit$lower, "upper" = fit$upper))
+}
+fig1b <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 
+              breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), 
+              title.s = "Overall survival", title.t = "Time (months)", 
+              CI = f.custom)
+print(fig1b)
 }
 \references{
 \enumerate{

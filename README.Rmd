@@ -55,6 +55,21 @@ fig1 <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, colors = ggsci
 print(fig1)
 ```
 
+## Example: custom CI function
+
+```{r example_custom}
+library(ggKaplanMeier)
+data <- survival::lung
+f.custom <- function() {
+  fit <- survival::survfit(survival::Surv(.time, .status) ~ 1, 
+                           conf.type = "logit")
+  return(data.frame("time" = fit$time, "surv" = fit$surv, 
+                    "lower" = fit$lower, "upper" = fit$upper))
+}
+fig1 <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)", CI = f.custom)
+print(fig1)
+```
+
 ## Further Reading
 1. Dorey, F.J. and Korn, E.L., 1987. Effective sample sizes for confidence intervals for survival probabilities. *Statistics in Medicine*, 6(6), pp. 679–687.
 2. Fay, M.P., Brittain, E.H. and Proschan, M.A., 2013. Pointwise confidence intervals for a survival distribution with small samples or heavy censoring. *Biostatistics*, 14(4), pp. 723–736.

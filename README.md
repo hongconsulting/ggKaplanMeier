@@ -60,6 +60,23 @@ print(fig1)
 
 ![](man/figures/README-example_2-1.png)<!-- -->
 
+## Example: custom CI function
+
+``` r
+library(ggKaplanMeier)
+data <- survival::lung
+f.custom <- function() {
+  fit <- survival::survfit(survival::Surv(.time, .status) ~ 1, 
+                           conf.type = "logit")
+  return(data.frame("time" = fit$time, "surv" = fit$surv, 
+                    "lower" = fit$lower, "upper" = fit$upper))
+}
+fig1 <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)", CI = f.custom)
+print(fig1)
+```
+
+![](man/figures/README-example_custom-1.png)<!-- -->
+
 ## Further Reading
 
 1.  Dorey, F.J. and Korn, E.L., 1987. Effective sample sizes for

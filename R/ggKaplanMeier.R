@@ -1,6 +1,23 @@
 #' @import patchwork
 utils::globalVariables(c("fstrata", "lower", "n_risk", "surv", "strata", "upper"))
 
+ggKM.BPCP <- function(data_input, method) {
+  if (!requireNamespace("bpcp", quietly = TRUE)) stop("[ggKM.BPCP] requires package 'bpcp'")
+  factors <- unique(data_input$strata)
+  output <- list()
+  for (f in factors) {
+    subdata_input <- data_input[data_input$strata == f,]
+    fit <- bpcp::bpcpfit(subdata_input$time, subdata_input$status)
+    output_data <- data.frame("time" = fit[[1]]$L,
+                              "surv" = fit[[1]]$surv,
+                              "lower" = fit[[1]]$lower,
+                              "upper" = fit[[1]]$upper,
+                              "strata" = f) 
+    output[[as.character(f)]] <- output_data
+  }
+  return(do.call(rbind, output))
+}
+
 ggKM.censor <- function(data_summary, data_input) {
   data_input <- data_input[data_input$status == 0,]
   factors <- unique(data_input$strata)
@@ -18,6 +35,41 @@ ggKM.censor <- function(data_summary, data_input) {
       "strata" = f)
   }
   return(do.call(rbind, output))
+}
+
+ggKM.custom <- function(data_input, f_custom) {
+  factors <- unique(data_input$strata)
+  output <- list()
+  for (f in factors) {
+    sub_data <- data_input[data_input$strata == f,]
+    .time <- sub_data$time
+    .status <- sub_data$status
+    environment(f_custom) <- environment()
+    output.custom <- f_custom()
+    #output.custom$strata <- f
+    #output[[as.character(f)]] <- output.custom
+    # output.custom <- f_custom()
+    output[[as.character(f)]] <- data.frame(
+      "time" = output.custom$time,
+      "surv" = output.custom$surv,
+      "lower" = output.custom$lower,
+      "upper" = output.custom$upper,
+      "strata" = f)
+  }
+  return(do.call(rbind, output))
+}
+
+ggKM.LOCF <- function(x) {
+  n <- length(x)
+  if (n == 0) return(x)
+  if (is.na(x[1])) return(x)
+  for (i in 2:n) {
+    if (is.na(x[i])) {
+      x[i] <- x[i - 1]
+      break
+    }
+  }
+  return(x)
 }
 
 ggKM.step <- function(data_summary, data_input, t_max = Inf) {
@@ -52,36 +104,6 @@ ggKM.step <- function(data_summary, data_input, t_max = Inf) {
   return(do.call(rbind, output))
 }
 
-ggKM.BPCP <- function(data_input, method) {
-  if (!requireNamespace("bpcp", quietly = TRUE)) stop("[ggKM.BPCP] requires package 'bpcp'")
-  factors <- unique(data_input$strata)
-  output <- list()
-  for (f in factors) {
-    subdata_input <- data_input[data_input$strata == f,]
-    fit <- bpcp::bpcpfit(subdata_input$time, subdata_input$status)
-    output_data <- data.frame("time" = fit[[1]]$L,
-                         "surv" = fit[[1]]$surv,
-                         "lower" = fit[[1]]$lower,
-                         "upper" = fit[[1]]$upper,
-                         "strata" = f) 
-    output[[as.character(f)]] <- output_data
-  }
-  return(do.call(rbind, output))
-}
-
-ggKM.LOCF <- function(x) {
-  n <- length(x)
-  if (n == 0) return(x)
-  if (is.na(x[1])) return(x)
-  for (i in 2:n) {
-    if (is.na(x[i])) {
-      x[i] <- x[i - 1]
-      break
-    }
-  }
-  return(x)
-}
-
 ggKM.WH <- function(data_input, method) {
   if (!requireNamespace("WHKMconf", quietly = TRUE)) stop("[ggKM.WH] requires package 'WHKMconf'")
   factors <- unique(data_input$strata)
@@ -97,7 +119,7 @@ ggKM.WH <- function(data_input, method) {
     } else if (method == "Nair") {
       CI <- WHKMconf::WH_Nair(summary$time, summary$surv, summary$std.err, summary$n.risk, summary$n.event)
     } else if (method == "HM") {
-      CI <- WHKMconf::WH_HollanderMcKeague(summary$time, summary$n.risk, summary$n.event)
+      CI <- WHKMconf::WH_HollanderMcKeague(summary$time, summary$n.risk, summary$n.event, adapt = FALSE)
     } else stop("[ggKM.WH] invalid method")
     output[[as.character(f)]] <- data.frame(
       "time" = summary$time,
@@ -116,12 +138,12 @@ ggKM.WH <- function(data_input, method) {
 #' Generates a Kaplan–Meier plot with optional confidence intervals and risk 
 #' table.
 #' @param time Numeric vector of follow-up times.
-#' @param status Numeric event indicator (`1` = event, `0` = censored).
+#' @param status Integer vector event indicator (`1` = event, `0` = censored).
 #' @param group Optional integer vector grouping variable.
 #' @param breaks.s Y-axis (survival) tick marks. Default = `seq(0, 1, 0.25)`.
 #' @param breaks.t X-axis (time) tick marks. Default = 
 #' `seq(0, max(time), by = 12)`.
-#' @param CI String indicating the CI type:
+#' @param CI String indicating the CI type (or a custom function; see Details):
 #'   \itemize{
 #'     \item `"none"`: none
 #'     \item Pointwise confidence intervals:
@@ -186,6 +208,21 @@ ggKM.WH <- function(data_input, method) {
 #' @param title.s Y-axis (survival) title. Default = `"Survival"`.
 #' @param title.t X-axis (time) title. Default = `"Time"`.
 #' @return A `ggplot` (+ `patchwork` if `risk.table` = `TRUE`) object.
+#' @details
+#' A custom function passed to `CI` is called once per `group` in an environment 
+#' containing the following variables:
+#' \itemize{
+#'   \item `.time`: Numeric vector of follow-up times for the current `group` 
+#'   \item `.status`: Integer vector event indicator (`1` = event, `0` = 
+#'   censored) for the current `group`
+#' }
+#' The custom function must return a `data.frame` with the following columns:
+#' \itemize{
+#'   \item `$time`: unique event times
+#'   \item `$surv`: survival estimate 
+#'   \item `$lower`: lower confidence limit
+#'   \item `$upper`: upper confidence limit
+#' }
 #' @references
 #' 1. Greenwood, M., 1926. A report on the natural duration of cancer. In: 
 #' *Reports on Public Health and Medical Subjects*, 33, pp. 1–26. London: 
@@ -212,10 +249,21 @@ ggKM.WH <- function(data_input, method) {
 #' Association*, 92(437), pp. 215–226.
 #' @examples
 #' data <- survival::lung
-#' g <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 
-#'           breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"),
-#'           title.s = "Overall survival", title.t = "Time (months)")
-#' print(g)
+#' fig1a <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 
+#'               breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"),
+#'               title.s = "Overall survival", title.t = "Time (months)")
+#' print(fig1a)
+#' f.custom <- function() {
+#'   fit <- survival::survfit(survival::Surv(.time, .status) ~ 1,  
+#'                            conf.type = "logit")
+#'   return(data.frame("time" = fit$time, "surv" = fit$surv, 
+#'                     "lower" = fit$lower, "upper" = fit$upper))
+#' }
+#' fig1b <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, 
+#'               breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), 
+#'               title.s = "Overall survival", title.t = "Time (months)", 
+#'               CI = f.custom)
+#' print(fig1b)
 #' @export
 ggKM <- function(time, status, group = NULL,
                  breaks.s = seq(0, 1, 0.25), breaks.t = NULL,
@@ -231,6 +279,10 @@ ggKM <- function(time, status, group = NULL,
                  risk.table = TRUE, risk.table.margin = 16, risk.table.prop = 0.2,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time") {
+  if (inherits(CI, "function")) {
+    f_custom <- CI
+    CI <- "custom"
+  }
   if (is.null(group)) group <- rep(1, length(time))
   group <- as.numeric(group)
   n_group <- length(unique(group))
@@ -267,6 +319,8 @@ ggKM <- function(time, status, group = NULL,
     data_summary <- ggKM.WH(data_input, CI)
   } else if (CI == "BPCP") {
     data_summary <- ggKM.BPCP(data_input)
+  } else if (CI == "custom") {
+    data_summary <- ggKM.custom(data_input, f_custom)
   } else stop("[ggKM] invalid CI")
   data_step <- ggKM.step(data_summary, data_input)
   levels_order <- sort(unique(group)) # enforce factor level order consistency

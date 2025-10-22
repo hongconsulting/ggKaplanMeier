@@ -66,7 +66,7 @@ f.custom <- function() {
   return(data.frame("time" = fit$time, "surv" = fit$surv, 
                     "lower" = fit$lower, "upper" = fit$upper))
 }
-fig1 <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)", CI = f.custom)
+fig1 <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex, CI = f.custom, breaks.t = seq(0, 30, 6), legend.labels = c("Male", "Female"), title.s = "Overall survival", title.t = "Time (months)")
 print(fig1)
 ```
 

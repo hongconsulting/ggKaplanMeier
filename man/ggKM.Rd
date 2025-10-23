@@ -169,7 +169,7 @@ fig1a <- ggKM(data$time * 12 / 365.2425, data$status - 1, data$sex,
 print(fig1a)
 f.custom <- function() {
   fit <- survival::survfit(survival::Surv(.time, .status) ~ 1,  
-                           conf.type = "plain")
+                           conf.type = "arcsin")
   return(data.frame("time" = fit$time, "surv" = fit$surv, 
                     "lower" = fit$lower, "upper" = fit$upper))
 }

@@ -255,7 +255,7 @@ ggKM.WH <- function(data_input, method) {
 #' print(fig1a)
 #' f.custom <- function() {
 #'   fit <- survival::survfit(survival::Surv(.time, .status) ~ 1,  
-#'                            conf.type = "plain")
+#'                            conf.type = "arcsin")
 #'   return(data.frame("time" = fit$time, "surv" = fit$surv, 
 #'                     "lower" = fit$lower, "upper" = fit$upper))
 #' }

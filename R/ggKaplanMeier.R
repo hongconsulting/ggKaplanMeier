@@ -124,8 +124,8 @@ ggKM.WH <- function(data_input, method) {
     output[[as.character(f)]] <- data.frame(
       "time" = summary$time,
       "surv" = summary$surv,
-      "lower" = CI[, 1],
-      "upper" = CI[, 2],
+      "lower" = CI[, 2],
+      "upper" = CI[, 3],
       "strata" = f)
   }
   return(do.call(rbind, output))

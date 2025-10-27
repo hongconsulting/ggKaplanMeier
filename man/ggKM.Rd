@@ -27,6 +27,7 @@ ggKM(
   legend.text.align = 1,
   line.width = 0.5,
   line.height = 0.025,
+  max.t = NULL,
   risk.table = TRUE,
   risk.table.margin = 16,
   risk.table.prop = 0.2,
@@ -120,6 +121,9 @@ Set to \code{"none"} if \code{group} is \code{NULL}.}
 \item{line.width}{Line width survival curves and censor marks. Default = \code{0.5}.}
 
 \item{line.height}{Height of censor marks. Default = \code{0.025}.}
+
+\item{max.t}{Optional numeric value specifying the maximum time up to which
+the Kaplan–Meier plot and risk table are displayed.}
 
 \item{risk.table}{Logical; if \code{TRUE}, show risk table. Default = \code{TRUE}.}
 

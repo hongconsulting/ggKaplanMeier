@@ -93,9 +93,11 @@ ggKM.step <- function(data_summary, data_input, t_max = Inf) {
       "lower" = rep(subdata_summary$lower, each = 2)[-end],
       "upper" = rep(subdata_summary$upper, each = 2)[-end],
       "strata" = f)
-    if (max(subdata_summary$time) < max(subdata_input$time)) {
+    newdata <- newdata[newdata$time <= t_max,]
+    subdata_t_max <- max(max(newdata$time), t_max)
+    if (max(newdata$time) < subdata_t_max) {
       endrow <- newdata[nrow(newdata),]
-      endrow$time <- max(subdata_input$time)
+      endrow$time <- subdata_t_max
       output[[as.character(f)]] <- rbind(newdata, endrow)
     } else {
       output[[as.character(f)]] <- newdata
@@ -198,6 +200,8 @@ ggKM.WH <- function(data_input, method) {
 #' `1` = right. Default = `1`.
 #' @param line.width Line width survival curves and censor marks. Default = `0.5`.
 #' @param line.height Height of censor marks. Default = `0.025`.
+#' @param max.t Optional numeric value specifying the maximum time up to which 
+#' the Kaplan–Meier plot and risk table are displayed. 
 #' @param risk.table Logical; if `TRUE`, show risk table. Default = `TRUE`.
 #' @param risk.table.margin Numeric value specifying the horizontal spacing 
 #' between the risk table labels and the risk table. Default = `16`.
@@ -278,7 +282,7 @@ ggKM <- function(time, status, group = NULL,
                  legend.label.pos = "left", 
                  legend.labels = NULL, legend.ncol = NULL, legend.nrow = NULL,
                  legend.pos = c(0.9, 0.9), legend.text.align = 1,
-                 line.width = 0.5, line.height = 0.025,
+                 line.width = 0.5, line.height = 0.025, max.t = NULL,
                  risk.table = TRUE, risk.table.margin = 16, risk.table.prop = 0.2,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time") {
@@ -329,11 +333,12 @@ ggKM <- function(time, status, group = NULL,
   } else if (CI == "custom") {
     data_summary <- ggKM.custom(data_input, f_custom)
   } else stop("[ggKM] invalid CI")
-  data_step <- ggKM.step(data_summary, data_input)
+  if (is.null(max.t)) max.t <- max(time)
+  x_lim <- c(0, max.t)
+  data_step <- ggKM.step(data_summary, data_input, max.t)
   levels_order <- sort(unique(group)) # enforce factor level order consistency
   data_step$fstrata <- factor(data_step$strata, levels = levels_order)
   data_pruned <- data_step[!is.na(data_step$lower),]
-  x_lim <- c(0, max(time))
   g_KM <- ggplot2::ggplot(data_step, ggplot2::aes(time, surv, color = fstrata, fill = fstrata)) +
     ggplot2::coord_cartesian(ylim = c(0, 1), xlim = x_lim, clip = "off") +
     ggplot2::geom_hline(yintercept = grid.s, color = grid.color, linewidth = grid.width) +
@@ -365,10 +370,11 @@ ggKM <- function(time, status, group = NULL,
       ggplot2::geom_ribbon(data = data_pruned, ggplot2::aes(ymin = lower, ymax = upper, fill = fstrata),
                            alpha = CI.alpha, colour = NA)
   }
+  
   data_censor <- ggKM.censor(data_summary, data_input)
   data_censor$fstrata <- factor(data_censor$strata, levels = levels_order)
   g_KM <- g_KM + ggplot2::geom_segment(
-    data = data_censor,
+    data = data_censor[data_censor$time <= max.t,],
     ggplot2::aes(x = time, xend = time,
                  y = surv - line.height/2, yend = surv + line.height/2,
                  color = fstrata),
@@ -391,7 +397,7 @@ ggKM <- function(time, status, group = NULL,
     } else {
       data_risk$strata <- "At risk:"
     }
-    g_risk <- ggplot2::ggplot(data_risk, ggplot2::aes(time, strata, label = n_risk)) +
+    g_risk <- ggplot2::ggplot(data_risk[data_risk$time <= max.t,], ggplot2::aes(time, strata, label = n_risk)) +
       ggplot2::coord_cartesian(xlim = x_lim, clip = "off") +
       ggplot2::geom_text(size = textsize.risk * 127/360) +
       ggplot2::scale_x_continuous(breaks = breaks.t, expand = c(0, 0)) +

@@ -146,6 +146,9 @@ Generates a Kaplan–Meier plot with optional confidence intervals and risk
 table.
 }
 \details{
+Observations with invalid \code{time} or missing \code{status} are automatically
+excluded.
+
 A custom function passed to \code{CI} is called once per \code{group} in an environment
 containing the following variables:
 \itemize{

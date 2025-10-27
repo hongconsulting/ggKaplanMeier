@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -239,7 +239,9 @@ between the risk table labels and the risk table. Default = <code>16</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>A custom function passed to <code>CI</code> is called once per <code>group</code> in an environment
+    <p>Observations with invalid <code>time</code> or missing <code>status</code> are automatically
+excluded.</p>
+<p>A custom function passed to <code>CI</code> is called once per <code>group</code> in an environment
 containing the following variables:</p><ul><li><p><code>.time</code>: Numeric vector of follow-up times for the current <code>group</code></p></li>
 <li><p><code>.status</code>: Integer vector event indicator (<code>1</code> = event, <code>0</code> =
 censored) for the current <code>group</code></p></li>

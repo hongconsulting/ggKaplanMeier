@@ -209,6 +209,9 @@ ggKM.WH <- function(data_input, method) {
 #' @param title.t X-axis (time) title. Default = `"Time"`.
 #' @return A `ggplot` (+ `patchwork` if `risk.table` = `TRUE`) object.
 #' @details
+#' Observations with invalid `time` or missing `status` are automatically 
+#' excluded.
+#' 
 #' A custom function passed to `CI` is called once per `group` in an environment 
 #' containing the following variables:
 #' \itemize{
@@ -279,6 +282,10 @@ ggKM <- function(time, status, group = NULL,
                  risk.table = TRUE, risk.table.margin = 16, risk.table.prop = 0.2,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time") {
+  keep <- !is.na(time) & !is.na(status) & time > 0
+  time <- time[keep]
+  status <- status[keep]
+  if (!is.null(group)) group <- group[keep]
   if (inherits(CI, "function")) {
     f_custom <- CI
     CI <- "custom"

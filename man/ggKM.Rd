@@ -25,6 +25,10 @@ ggKM(
   legend.nrow = NULL,
   legend.pos = c(0.9, 0.9),
   legend.text.align = 1,
+  margin.KM.b = 0,
+  margin.KM.l = 0,
+  margin.KM.r = 0,
+  margin.KM.t = 0,
   line.width = 0.5,
   line.height = 0.025,
   max.t = NULL,
@@ -117,6 +121,18 @@ Set to \code{"none"} if \code{group} is \code{NULL}.}
 
 \item{legend.text.align}{Legend text alignment: \code{0} = left, \code{0.5} = center,
 \code{1} = right. Default = \code{1}.}
+
+\item{margin.KM.b}{Numeric value specifying the size of the Kaplan–Meier plot
+bottom margin in points. Default = \code{0}.}
+
+\item{margin.KM.l}{Numeric value specifying the size of the Kaplan–Meier plot
+left margin in points. Default = \code{0}.}
+
+\item{margin.KM.r}{Numeric value specifying the size of the Kaplan–Meier plot
+right margin in points. Default = \code{0}.}
+
+\item{margin.KM.t}{Numeric value specifying the size of the Kaplan–Meier plot
+top margin in points. Default = \code{0}.}
 
 \item{line.width}{Line width survival curves and censor marks. Default = \code{0.5}.}
 

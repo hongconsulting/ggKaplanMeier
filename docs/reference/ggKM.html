@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,10 @@ table.</p>
 <span>  legend.nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend.pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
 <span>  legend.text.align <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  margin.KM.b <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  margin.KM.l <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  margin.KM.r <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  margin.KM.t <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  line.width <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  line.height <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  max.t <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -191,6 +195,26 @@ Set to <code>"none"</code> if <code>group</code> is <code>NULL</code>.</p></dd>
 <dt id="arg-legend-text-align">legend.text.align<a class="anchor" aria-label="anchor" href="#arg-legend-text-align"></a></dt>
 <dd><p>Legend text alignment: <code>0</code> = left, <code>0.5</code> = center,
 <code>1</code> = right. Default = <code>1</code>.</p></dd>
+
+
+<dt id="arg-margin-km-b">margin.KM.b<a class="anchor" aria-label="anchor" href="#arg-margin-km-b"></a></dt>
+<dd><p>Numeric value specifying the size of the Kaplan–Meier plot
+bottom margin in points. Default = <code>0</code>.</p></dd>
+
+
+<dt id="arg-margin-km-l">margin.KM.l<a class="anchor" aria-label="anchor" href="#arg-margin-km-l"></a></dt>
+<dd><p>Numeric value specifying the size of the Kaplan–Meier plot
+left margin in points. Default = <code>0</code>.</p></dd>
+
+
+<dt id="arg-margin-km-r">margin.KM.r<a class="anchor" aria-label="anchor" href="#arg-margin-km-r"></a></dt>
+<dd><p>Numeric value specifying the size of the Kaplan–Meier plot
+right margin in points. Default = <code>0</code>.</p></dd>
+
+
+<dt id="arg-margin-km-t">margin.KM.t<a class="anchor" aria-label="anchor" href="#arg-margin-km-t"></a></dt>
+<dd><p>Numeric value specifying the size of the Kaplan–Meier plot
+top margin in points. Default = <code>0</code>.</p></dd>
 
 
 <dt id="arg-line-width">line.width<a class="anchor" aria-label="anchor" href="#arg-line-width"></a></dt>

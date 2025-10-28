@@ -200,6 +200,14 @@ ggKM.WH <- function(data_input, method) {
 #' `1` = right. Default = `1`.
 #' @param line.width Line width survival curves and censor marks. Default = `0.5`.
 #' @param line.height Height of censor marks. Default = `0.025`.
+#' @param margin.KM.b Numeric value specifying the size of the Kaplan–Meier plot
+#' bottom margin in points. Default = `0`.
+#' @param margin.KM.l Numeric value specifying the size of the Kaplan–Meier plot
+#' left margin in points. Default = `0`.
+#' @param margin.KM.r Numeric value specifying the size of the Kaplan–Meier plot
+#' right margin in points. Default = `0`.
+#' @param margin.KM.t Numeric value specifying the size of the Kaplan–Meier plot
+#' top margin in points. Default = `0`.
 #' @param max.t Optional numeric value specifying the maximum time up to which 
 #' the Kaplan–Meier plot and risk table are displayed. 
 #' @param risk.table Logical; if `TRUE`, show risk table. Default = `TRUE`.
@@ -282,6 +290,7 @@ ggKM <- function(time, status, group = NULL,
                  legend.label.pos = "left", 
                  legend.labels = NULL, legend.ncol = NULL, legend.nrow = NULL,
                  legend.pos = c(0.9, 0.9), legend.text.align = 1,
+                 margin.KM.b = 0, margin.KM.l = 0, margin.KM.r = 0, margin.KM.t = 0,
                  line.width = 0.5, line.height = 0.025, max.t = NULL,
                  risk.table = TRUE, risk.table.margin = 16, risk.table.prop = 0.2,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
@@ -364,7 +373,9 @@ ggKM <- function(time, status, group = NULL,
                    legend.justification = legend.just,
                    legend.position = legend.pos,
                    legend.text = ggplot2::element_text(size = textsize.legend),
-                   legend.text.align = legend.text.align)
+                   legend.text.align = legend.text.align,
+                   plot.margin = ggplot2::margin(t = margin.KM.t, r = margin.KM.r, 
+                                                 b = margin.KM.b, l = margin.KM.l))
   if (CI > 0) {
     g_KM <- g_KM +
       ggplot2::geom_ribbon(data = data_pruned, ggplot2::aes(ymin = lower, ymax = upper, fill = fstrata),

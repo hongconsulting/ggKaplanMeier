@@ -1,6 +1,6 @@
 Package: ggKaplanMeier
 Title: Kaplan-Meier plots
-Version: 0.11.3
+Version: 0.12.0
 Authors@R: 
     person("Wei", "Hong", , "wei.hong@hongconsulting.ai", role = c("aut", "cre"))
 Description: Kaplan–Meier plots using the 'ggplot2' package, with an overall 

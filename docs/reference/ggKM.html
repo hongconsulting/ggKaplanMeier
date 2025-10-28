@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,12 +65,12 @@ table.</p>
 <span>  margin.KM.b <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  margin.KM.l <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  margin.KM.r <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  margin.KM.t <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  margin.KM.t <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  margin.risk <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>  line.width <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  line.height <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  max.t <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  risk.table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  risk.table.margin <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>  risk.table.prop <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  textsize.axis <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  textsize.legend <span class="op">=</span> <span class="fl">12</span>,</span>
@@ -214,7 +214,12 @@ right margin in points. Default = <code>0</code>.</p></dd>
 
 <dt id="arg-margin-km-t">margin.KM.t<a class="anchor" aria-label="anchor" href="#arg-margin-km-t"></a></dt>
 <dd><p>Numeric value specifying the size of the Kaplan–Meier plot
-top margin in points. Default = <code>0</code>.</p></dd>
+top margin in points. Default = <code>4</code>.</p></dd>
+
+
+<dt id="arg-margin-risk">margin.risk<a class="anchor" aria-label="anchor" href="#arg-margin-risk"></a></dt>
+<dd><p>Numeric value specifying the horizontal spacing between
+the risk table labels and the risk table. Default = <code>16</code>.</p></dd>
 
 
 <dt id="arg-line-width">line.width<a class="anchor" aria-label="anchor" href="#arg-line-width"></a></dt>
@@ -232,11 +237,6 @@ the Kaplan–Meier plot and risk table are displayed.</p></dd>
 
 <dt id="arg-risk-table">risk.table<a class="anchor" aria-label="anchor" href="#arg-risk-table"></a></dt>
 <dd><p>Logical; if <code>TRUE</code>, show risk table. Default = <code>TRUE</code>.</p></dd>
-
-
-<dt id="arg-risk-table-margin">risk.table.margin<a class="anchor" aria-label="anchor" href="#arg-risk-table-margin"></a></dt>
-<dd><p>Numeric value specifying the horizontal spacing
-between the risk table labels and the risk table. Default = <code>16</code>.</p></dd>
 
 
 <dt id="arg-risk-table-prop">risk.table.prop<a class="anchor" aria-label="anchor" href="#arg-risk-table-prop"></a></dt>

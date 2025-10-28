@@ -207,12 +207,12 @@ ggKM.WH <- function(data_input, method) {
 #' @param margin.KM.r Numeric value specifying the size of the Kaplan–Meier plot
 #' right margin in points. Default = `0`.
 #' @param margin.KM.t Numeric value specifying the size of the Kaplan–Meier plot
-#' top margin in points. Default = `0`.
+#' top margin in points. Default = `4`.
+#' @param margin.risk Numeric value specifying the horizontal spacing between 
+#' the risk table labels and the risk table. Default = `16`. 
 #' @param max.t Optional numeric value specifying the maximum time up to which 
 #' the Kaplan–Meier plot and risk table are displayed. 
 #' @param risk.table Logical; if `TRUE`, show risk table. Default = `TRUE`.
-#' @param risk.table.margin Numeric value specifying the horizontal spacing 
-#' between the risk table labels and the risk table. Default = `16`.
 #' @param risk.table.prop Relative height of the risk table. Default = `0.2`.
 #' @param textsize.axis Axis text size. Default = `12`.
 #' @param textsize.legend Legend text size. Default = `12`.
@@ -290,9 +290,9 @@ ggKM <- function(time, status, group = NULL,
                  legend.label.pos = "left", 
                  legend.labels = NULL, legend.ncol = NULL, legend.nrow = NULL,
                  legend.pos = c(0.9, 0.9), legend.text.align = 1,
-                 margin.KM.b = 0, margin.KM.l = 0, margin.KM.r = 0, margin.KM.t = 0,
-                 line.width = 0.5, line.height = 0.025, max.t = NULL,
-                 risk.table = TRUE, risk.table.margin = 16, risk.table.prop = 0.2,
+                 margin.KM.b = 0, margin.KM.l = 0, margin.KM.r = 0, margin.KM.t = 4,
+                 margin.risk = 16, line.width = 0.5, line.height = 0.025, max.t = NULL,
+                 risk.table = TRUE, risk.table.prop = 0.2,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time") {
   keep <- !is.na(time) & !is.na(status) & time > 0
@@ -417,7 +417,7 @@ ggKM <- function(time, status, group = NULL,
       ggplot2::theme(
         axis.line = ggplot2::element_blank(),
         axis.text.x = ggplot2::element_blank(),
-        axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = risk.table.margin), 
+        axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = margin.risk), 
                                             size = textsize.risk),
         axis.ticks = ggplot2::element_blank(),
         axis.title = ggplot2::element_blank(),

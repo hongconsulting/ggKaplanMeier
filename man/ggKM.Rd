@@ -28,12 +28,12 @@ ggKM(
   margin.KM.b = 0,
   margin.KM.l = 0,
   margin.KM.r = 0,
-  margin.KM.t = 0,
+  margin.KM.t = 4,
+  margin.risk = 16,
   line.width = 0.5,
   line.height = 0.025,
   max.t = NULL,
   risk.table = TRUE,
-  risk.table.margin = 16,
   risk.table.prop = 0.2,
   textsize.axis = 12,
   textsize.legend = 12,
@@ -132,7 +132,10 @@ left margin in points. Default = \code{0}.}
 right margin in points. Default = \code{0}.}
 
 \item{margin.KM.t}{Numeric value specifying the size of the Kaplan–Meier plot
-top margin in points. Default = \code{0}.}
+top margin in points. Default = \code{4}.}
+
+\item{margin.risk}{Numeric value specifying the horizontal spacing between
+the risk table labels and the risk table. Default = \code{16}.}
 
 \item{line.width}{Line width survival curves and censor marks. Default = \code{0.5}.}
 
@@ -142,9 +145,6 @@ top margin in points. Default = \code{0}.}
 the Kaplan–Meier plot and risk table are displayed.}
 
 \item{risk.table}{Logical; if \code{TRUE}, show risk table. Default = \code{TRUE}.}
-
-\item{risk.table.margin}{Numeric value specifying the horizontal spacing
-between the risk table labels and the risk table. Default = \code{16}.}
 
 \item{risk.table.prop}{Relative height of the risk table. Default = \code{0.2}.}
 

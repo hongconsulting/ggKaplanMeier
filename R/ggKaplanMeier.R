@@ -94,7 +94,7 @@ ggKM.step <- function(data_summary, data_input, t_max = Inf) {
       "upper" = rep(subdata_summary$upper, each = 2)[-end],
       "strata" = f)
     newdata <- newdata[newdata$time <= t_max,]
-    subdata_t_max <- max(max(newdata$time), t_max)
+    subdata_t_max <- min(max(subdata_input$time), t_max)
     if (max(newdata$time) < subdata_t_max) {
       endrow <- newdata[nrow(newdata),]
       endrow$time <- subdata_t_max

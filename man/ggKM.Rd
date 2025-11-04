@@ -35,6 +35,7 @@ ggKM(
   max.t = NULL,
   risk.table = TRUE,
   risk.table.prop = 0.2,
+  t.labels = NULL,
   textsize.axis = 12,
   textsize.legend = 12,
   textsize.risk = 12,
@@ -147,6 +148,9 @@ the Kaplan–Meier plot and risk table are displayed.}
 \item{risk.table}{Logical; if \code{TRUE}, show risk table. Default = \code{TRUE}.}
 
 \item{risk.table.prop}{Relative height of the risk table. Default = \code{0.2}.}
+
+\item{t.labels}{Optional string vector specifying custom labels for the
+time-axis breaks defined by \code{breaks.t}.}
 
 \item{textsize.axis}{Axis text size. Default = \code{12}.}
 

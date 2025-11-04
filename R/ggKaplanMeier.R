@@ -214,6 +214,8 @@ ggKM.WH <- function(data_input, method) {
 #' the Kaplan–Meier plot and risk table are displayed. 
 #' @param risk.table Logical; if `TRUE`, show risk table. Default = `TRUE`.
 #' @param risk.table.prop Relative height of the risk table. Default = `0.2`.
+#' @param t.labels Optional string vector specifying custom labels for the 
+#' time-axis breaks defined by `breaks.t`.
 #' @param textsize.axis Axis text size. Default = `12`.
 #' @param textsize.legend Legend text size. Default = `12`.
 #' @param textsize.risk Risk table text size. Default = `12`.
@@ -292,7 +294,7 @@ ggKM <- function(time, status, group = NULL,
                  legend.pos = c(0.9, 0.9), legend.text.align = 1,
                  margin.KM.b = 0, margin.KM.l = 0, margin.KM.r = 0, margin.KM.t = 4,
                  margin.risk = 16, line.width = 0.5, line.height = 0.025, max.t = NULL,
-                 risk.table = TRUE, risk.table.prop = 0.2,
+                 risk.table = TRUE, risk.table.prop = 0.2, t.labels = NULL,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time") {
   keep <- !is.na(time) & !is.na(status) & time > 0
@@ -309,6 +311,7 @@ ggKM <- function(time, status, group = NULL,
   if (n_group == 1) legend.pos = "none"
   if (is.null(breaks.t)) breaks.t <- seq(0, max(time), by = 12)
   if (is.null(legend.labels)) legend.labels <- 0:(n_group - 1)
+  if (is.null(t.labels)) t.labels <- breaks.t
   data_input <- data.frame("time" = time, "status" = status, "strata" = group)
   data_censor <- data_input[data_input$status == 0,]
   if (CI == "modcloglog") {
@@ -361,7 +364,7 @@ ggKM <- function(time, status, group = NULL,
       labels = legend.labels,
       aesthetics = c("color", "fill")
     ) +
-    ggplot2::scale_x_continuous(breaks = breaks.t, expand = c(0, 0)) +
+    ggplot2::scale_x_continuous(breaks = breaks.t, labels = t.labels, expand = c(0, 0)) +
     ggplot2::scale_y_continuous(breaks = breaks.s, expand = c(0, 0)) +
     ggplot2::theme_classic() +
     ggplot2::theme(axis.text = ggplot2::element_text(size = textsize.axis),

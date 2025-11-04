@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,6 +72,7 @@ table.</p>
 <span>  max.t <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  risk.table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  risk.table.prop <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  t.labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  textsize.axis <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  textsize.legend <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  textsize.risk <span class="op">=</span> <span class="fl">12</span>,</span>
@@ -241,6 +242,11 @@ the Kaplan–Meier plot and risk table are displayed.</p></dd>
 
 <dt id="arg-risk-table-prop">risk.table.prop<a class="anchor" aria-label="anchor" href="#arg-risk-table-prop"></a></dt>
 <dd><p>Relative height of the risk table. Default = <code>0.2</code>.</p></dd>
+
+
+<dt id="arg-t-labels">t.labels<a class="anchor" aria-label="anchor" href="#arg-t-labels"></a></dt>
+<dd><p>Optional string vector specifying custom labels for the
+time-axis breaks defined by <code>breaks.t</code>.</p></dd>
 
 
 <dt id="arg-textsize-axis">textsize.axis<a class="anchor" aria-label="anchor" href="#arg-textsize-axis"></a></dt>

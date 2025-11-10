@@ -174,6 +174,8 @@ ggKM.WH <- function(data_input, method) {
 #' `0.2`.
 #' @param colors Vector of colors of the survival curves. Default = 
 #' `ggsci::pal_nejm()(8)`.
+#' @param digits.fixed Number of decimal places for the risk table if `weights` 
+#' are used. Default = `1`.
 #' @param grid.color Gridline color. Default = `grDevices::rgb(0.95, 0.95, 0.95)`.
 #' @param grid.s Horizontal gridline positions. Default = `seq(0, 1, 0.25)`.
 #' @param grid.t Vertical gridline positions. Default = `NULL`.
@@ -221,6 +223,7 @@ ggKM.WH <- function(data_input, method) {
 #' @param textsize.risk Risk table text size. Default = `12`.
 #' @param title.s Y-axis (survival) title. Default = `"Survival"`.
 #' @param title.t X-axis (time) title. Default = `"Time"`.
+#' @param weights Optional numeric vector of observation weights.
 #' @return A `ggplot` (+ `patchwork` if `risk.table` = `TRUE`) object.
 #' @details
 #' Observations with invalid `time` or missing `status` are automatically 
@@ -285,7 +288,7 @@ ggKM.WH <- function(data_input, method) {
 ggKM <- function(time, status, group = NULL,
                  breaks.s = seq(0, 1, 0.25), breaks.t = NULL,
                  CI = "cloglog", CI.alpha = 0.2,
-                 colors = ggsci::pal_nejm()(8),
+                 colors = ggsci::pal_nejm()(8), digits.fixed = 1,
                  grid.color = grDevices::rgb(0.95, 0.95, 0.95),
                  grid.s = seq(0, 1, 0.25), grid.t = NULL, grid.width = 0.5,
                  legend.direction = "vertical", legend.just = "center",
@@ -296,11 +299,18 @@ ggKM <- function(time, status, group = NULL,
                  margin.risk = 16, line.width = 0.5, line.height = 0.025, max.t = NULL,
                  risk.table = TRUE, risk.table.prop = 0.2, t.labels = NULL,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
-                 title.s = "Survival", title.t = "Time") {
+                 title.s = "Survival", title.t = "Time", weights = NULL) {
   keep <- !is.na(time) & !is.na(status) & time > 0
+  if (is.null(weights)) {
+    w <- rep(1, length(time))
+    digits.fixed <- 0
+  } else {
+    w <- weights
+  }
   time <- time[keep]
   status <- status[keep]
   if (!is.null(group)) group <- group[keep]
+  w <- w[keep]
   if (inherits(CI, "function")) {
     f_custom <- CI
     CI <- "custom"
@@ -312,12 +322,12 @@ ggKM <- function(time, status, group = NULL,
   if (is.null(breaks.t)) breaks.t <- seq(0, max(time), by = 12)
   if (is.null(legend.labels)) legend.labels <- 0:(n_group - 1)
   if (is.null(t.labels)) t.labels <- breaks.t
-  data_input <- data.frame("time" = time, "status" = status, "strata" = group)
+  data_input <- data.frame("time" = time, "status" = status, "strata" = group, "w" = w)
   data_censor <- data_input[data_input$status == 0,]
   if (CI == "modcloglog") {
     fit <- survival::survfit(survival::Surv(time, status) ~ strata, 
                              data = data_input, conf.type = "log-log", 
-                             conf.lower = "modified")
+                             conf.lower = "modified", weights = w)
     s <- data.frame("time" = fit$time, "surv" = fit$surv, "lower" = fit$lower, "upper" = fit$upper)
     if (n_group == 1) {
       s$strata <- 1
@@ -328,7 +338,7 @@ ggKM <- function(time, status, group = NULL,
   } else {
     fit <- survival::survfit(survival::Surv(time, status) ~ strata, 
                              data = data_input, conf.type = "log-log", 
-                             conf.lower = "usual")
+                             conf.lower = "usual", weights = w)
     s <- summary(fit)
     if (n_group == 1) {
       s$strata <- rep(1, length(s$time))
@@ -339,10 +349,13 @@ ggKM <- function(time, status, group = NULL,
   if (CI == "cloglog" | CI == "modcloglog" | CI == "none") {
     data_summary <- data.frame(s[c("time", "surv", "lower", "upper", "strata")])
   } else if (CI == "HM" | CI == "Nair" | CI == "TG" | CI == "Rothman") {
+    if (!is.null(weights)) stop(paste0("[ggKM] weights not implemented for CI = ", CI))
     data_summary <- ggKM.WH(data_input, CI)
   } else if (CI == "BPCP") {
+    if (!is.null(weights)) stop(paste0("[ggKM] weights not implemented for CI = ", CI))
     data_summary <- ggKM.BPCP(data_input)
   } else if (CI == "custom") {
+    if (!is.null(weights)) stop(paste0("[ggKM] weights not implemented for CI = ", CI))
     data_summary <- ggKM.custom(data_input, f_custom)
   } else stop("[ggKM] invalid CI")
   if (is.null(max.t)) max.t <- max(time)
@@ -402,6 +415,7 @@ ggKM <- function(time, status, group = NULL,
       strata = NA,
       n_risk = s$n.risk
     )
+    data_risk$n_risk <- formatC(data_risk$n_risk, format = "f", digits = digits.fixed)
     if (n_group > 1) {
       data_risk$strata <- as.factor(as.numeric(sub("strata=", "", s$strata)))      
       data_risk <- rbind(data.frame(time = 0, strata = "At risk:", n_risk = ""), data_risk)

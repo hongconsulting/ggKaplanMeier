@@ -2,7 +2,7 @@ pandoc: '3.2'
 pkgdown: 2.1.3
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-11-04T08:06Z
+last_built: 2025-11-10T12:38Z
 urls:
   reference: https://hongconsulting.github.io/ggKaplanMeier/reference
   article: https://hongconsulting.github.io/ggKaplanMeier/articles

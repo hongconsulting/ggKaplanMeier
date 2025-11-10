@@ -13,6 +13,7 @@ ggKM(
   CI = "cloglog",
   CI.alpha = 0.2,
   colors = (ggsci::pal_nejm())(8),
+  digits.fixed = 1,
   grid.color = grDevices::rgb(0.95, 0.95, 0.95),
   grid.s = seq(0, 1, 0.25),
   grid.t = NULL,
@@ -40,7 +41,8 @@ ggKM(
   textsize.legend = 12,
   textsize.risk = 12,
   title.s = "Survival",
-  title.t = "Time"
+  title.t = "Time",
+  weights = NULL
 )
 }
 \arguments{
@@ -86,6 +88,9 @@ package)
 
 \item{colors}{Vector of colors of the survival curves. Default =
 \code{ggsci::pal_nejm()(8)}.}
+
+\item{digits.fixed}{Number of decimal places for the risk table if \code{weights}
+are used. Default = \code{1}.}
 
 \item{grid.color}{Gridline color. Default = \code{grDevices::rgb(0.95, 0.95, 0.95)}.}
 
@@ -161,6 +166,8 @@ time-axis breaks defined by \code{breaks.t}.}
 \item{title.s}{Y-axis (survival) title. Default = \code{"Survival"}.}
 
 \item{title.t}{X-axis (time) title. Default = \code{"Time"}.}
+
+\item{weights}{Optional numeric vector of observation weights.}
 }
 \value{
 A \code{ggplot} (+ \code{patchwork} if \code{risk.table} = \code{TRUE}) object.

@@ -44,6 +44,7 @@ ggKM.custom <- function(data_input, f_custom) {
     sub_data <- data_input[data_input$strata == f,]
     .time <- sub_data$time
     .status <- sub_data$status
+    .weights <- sub_data$weights
     environment(f_custom) <- environment()
     output.custom <- f_custom()
     #output.custom$strata <- f
@@ -235,6 +236,7 @@ ggKM.WH <- function(data_input, method) {
 #'   \item `.time`: Numeric vector of follow-up times for the current `group` 
 #'   \item `.status`: Integer vector event indicator (`1` = event, `0` = 
 #'   censored) for the current `group`
+#'   \item `.weights`: Numeric vector of weights for the current `group` 
 #' }
 #' The custom function must return a `data.frame` with the following columns:
 #' \itemize{
@@ -355,7 +357,7 @@ ggKM <- function(time, status, group = NULL,
     if (!is.null(weights)) stop(paste0("[ggKM] weights not implemented for CI = ", CI))
     data_summary <- ggKM.BPCP(data_input)
   } else if (CI == "custom") {
-    if (!is.null(weights)) stop(paste0("[ggKM] weights not implemented for CI = ", CI))
+    # if (!is.null(weights)) stop(paste0("[ggKM] weights not implemented for CI = ", CI))
     data_summary <- ggKM.custom(data_input, f_custom)
   } else stop("[ggKM] invalid CI")
   if (is.null(max.t)) max.t <- max(time)

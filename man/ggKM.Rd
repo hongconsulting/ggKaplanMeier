@@ -186,6 +186,7 @@ containing the following variables:
 \item \code{.time}: Numeric vector of follow-up times for the current \code{group}
 \item \code{.status}: Integer vector event indicator (\code{1} = event, \code{0} =
 censored) for the current \code{group}
+\item \code{.weights}: Numeric vector of weights for the current \code{group}
 }
 The custom function must return a \code{data.frame} with the following columns:
 \itemize{

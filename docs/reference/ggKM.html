@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -292,6 +292,7 @@ excluded.</p>
 containing the following variables:</p><ul><li><p><code>.time</code>: Numeric vector of follow-up times for the current <code>group</code></p></li>
 <li><p><code>.status</code>: Integer vector event indicator (<code>1</code> = event, <code>0</code> =
 censored) for the current <code>group</code></p></li>
+<li><p><code>.weights</code>: Numeric vector of weights for the current <code>group</code></p></li>
 </ul><p>The custom function must return a <code>data.frame</code> with the following columns:</p><ul><li><p><code>$time</code>: unique event times</p></li>
 <li><p><code>$surv</code>: survival estimate</p></li>
 <li><p><code>$lower</code>: lower confidence limit</p></li>

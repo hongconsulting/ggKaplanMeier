@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ table.</p>
 <span>  line.width <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  line.height <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  max.t <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  risk.table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  risk.table <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  risk.table.prop <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  t.labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  textsize.axis <span class="op">=</span> <span class="fl">12</span>,</span>
@@ -244,7 +244,10 @@ the Kaplan–Meier plot and risk table are displayed.</p></dd>
 
 
 <dt id="arg-risk-table">risk.table<a class="anchor" aria-label="anchor" href="#arg-risk-table"></a></dt>
-<dd><p>Logical; if <code>TRUE</code>, show risk table. Default = <code>TRUE</code>.</p></dd>
+<dd><p>Integer specifying the risk table mode:</p><ul><li><p><code>0</code>: No risk table</p></li>
+<li><p><code>1</code> (default): Labelled risk table</p></li>
+<li><p><code>2</code>: Color-coded risk table</p></li>
+</ul></dd>
 
 
 <dt id="arg-risk-table-prop">risk.table.prop<a class="anchor" aria-label="anchor" href="#arg-risk-table-prop"></a></dt>
@@ -282,7 +285,7 @@ time-axis breaks defined by <code>breaks.t</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>ggplot</code> (+ <code>patchwork</code> if <code>risk.table</code> = <code>TRUE</code>) object.</p>
+    <p>A <code>ggplot</code> (+ <code>patchwork</code> if <code>risk.table</code> ≥ <code>1</code>) object.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -293,7 +296,7 @@ containing the following variables:</p><ul><li><p><code>.time</code>: Numeric ve
 <li><p><code>.status</code>: Integer vector event indicator (<code>1</code> = event, <code>0</code> =
 censored) for the current <code>group</code></p></li>
 <li><p><code>.weights</code>: Numeric vector of weights for the current <code>group</code></p></li>
-</ul><p>The custom function must return a <code>data.frame</code> with the following columns:</p><ul><li><p><code>$time</code>: unique event times</p></li>
+</ul><p>The custom function must return a <code>data.frame</code> with the following columns:</p><ul><li><p><code>$time</code>: times</p></li>
 <li><p><code>$surv</code>: survival estimate</p></li>
 <li><p><code>$lower</code>: lower confidence limit</p></li>
 <li><p><code>$upper</code>: upper confidence limit</p></li>

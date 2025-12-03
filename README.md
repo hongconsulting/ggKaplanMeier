@@ -54,7 +54,7 @@ print(fig1b)
 ``` r
 library(ggKaplanMeier)
 data <- survival::colon
-fig1 <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, colors = ggsci::pal_nejm()(4)[c(2, 4, 3, 1)], legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), legend.pos = c(0.5, 0.1), margin.risk = 24, title.s = "Overall survival", title.t = "Time (months)")
+fig1 <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, colors = ggsci::pal_nejm()(4)[c(2, 4, 3, 1)], legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), legend.pos = c(0.5, 0.1), risk.table = 2, title.s = "Overall survival", title.t = "Time (months)")
 print(fig1)
 ```
 

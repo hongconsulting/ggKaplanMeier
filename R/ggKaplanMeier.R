@@ -215,7 +215,12 @@ ggKM.WH <- function(data_input, method) {
 #' the risk table labels and the risk table. Default = `16`. 
 #' @param max.t Optional numeric value specifying the maximum time up to which 
 #' the Kaplan–Meier plot and risk table are displayed. 
-#' @param risk.table Logical; if `TRUE`, show risk table. Default = `TRUE`.
+#' @param risk.table Integer specifying the risk table mode:
+#' \itemize{
+#'   \item `0`: No risk table 
+#'   \item `1` (default): Labelled risk table
+#'   \item `2`: Color-coded risk table 
+#' }
 #' @param risk.table.prop Relative height of the risk table. Default = `0.2`.
 #' @param t.labels Optional string vector specifying custom labels for the 
 #' time-axis breaks defined by `breaks.t`.
@@ -225,7 +230,7 @@ ggKM.WH <- function(data_input, method) {
 #' @param title.s Y-axis (survival) title. Default = `"Survival"`.
 #' @param title.t X-axis (time) title. Default = `"Time"`.
 #' @param weights Optional numeric vector of observation weights.
-#' @return A `ggplot` (+ `patchwork` if `risk.table` = `TRUE`) object.
+#' @return A `ggplot` (+ `patchwork` if `risk.table` ≥ `1`) object.
 #' @details
 #' Observations with invalid `time` or missing `status` are automatically 
 #' excluded.
@@ -240,7 +245,7 @@ ggKM.WH <- function(data_input, method) {
 #' }
 #' The custom function must return a `data.frame` with the following columns:
 #' \itemize{
-#'   \item `$time`: unique event times
+#'   \item `$time`: times
 #'   \item `$surv`: survival estimate 
 #'   \item `$lower`: lower confidence limit
 #'   \item `$upper`: upper confidence limit
@@ -299,7 +304,7 @@ ggKM <- function(time, status, group = NULL,
                  legend.pos = c(0.9, 0.9), legend.text.align = 1,
                  margin.KM.b = 0, margin.KM.l = 0, margin.KM.r = 0, margin.KM.t = 4,
                  margin.risk = 16, line.width = 0.5, line.height = 0.025, max.t = NULL,
-                 risk.table = TRUE, risk.table.prop = 0.2, t.labels = NULL,
+                 risk.table = 1, risk.table.prop = 0.2, t.labels = NULL,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time", weights = NULL) {
   keep <- !is.na(time) & !is.na(status) & time > 0
@@ -357,7 +362,6 @@ ggKM <- function(time, status, group = NULL,
     if (!is.null(weights)) stop(paste0("[ggKM] weights not implemented for CI = ", CI))
     data_summary <- ggKM.BPCP(data_input)
   } else if (CI == "custom") {
-    # if (!is.null(weights)) stop(paste0("[ggKM] weights not implemented for CI = ", CI))
     data_summary <- ggKM.custom(data_input, f_custom)
   } else stop("[ggKM] invalid CI")
   if (is.null(max.t)) max.t <- max(time)
@@ -396,10 +400,10 @@ ggKM <- function(time, status, group = NULL,
                                                  b = margin.KM.b, l = margin.KM.l))
   if (CI > 0) {
     g_KM <- g_KM +
-      ggplot2::geom_ribbon(data = data_pruned, ggplot2::aes(ymin = lower, ymax = upper, fill = fstrata),
+      ggplot2::geom_ribbon(data = data_pruned, 
+                           ggplot2::aes(ymin = lower, ymax = upper, fill = fstrata),
                            alpha = CI.alpha, colour = NA)
   }
-  
   data_censor <- ggKM.censor(data_summary, data_input)
   data_censor$fstrata <- factor(data_censor$strata, levels = levels_order)
   g_KM <- g_KM + ggplot2::geom_segment(
@@ -410,7 +414,7 @@ ggKM <- function(time, status, group = NULL,
     linewidth = line.width
   )
   g_KM <- g_KM + ggplot2::geom_line(linewidth = line.width)
-  if (risk.table) { 
+  if (risk.table >= 1) { 
     s <- summary(fit, times = breaks.t)
     data_risk <- data.frame(
       time = s$time,
@@ -418,37 +422,72 @@ ggKM <- function(time, status, group = NULL,
       n_risk = s$n.risk
     )
     data_risk$n_risk <- formatC(data_risk$n_risk, format = "f", digits = digits.fixed)
-    if (n_group > 1) {
-      data_risk$strata <- as.factor(as.numeric(sub("strata=", "", s$strata)))      
-      data_risk <- rbind(data.frame(time = 0, strata = "At risk:", n_risk = ""), data_risk)
-      data_risk$strata <- as.factor(data_risk$strata)
-      data_risk$strata <- stats::relevel(data_risk$strata, "At risk:")
-      levels(data_risk$strata) <- c("At risk:", legend.labels)
+    if (risk.table == 1) {
+      if (n_group > 1) {
+        data_risk$strata <- as.factor(as.numeric(sub("strata=", "", s$strata)))      
+        data_risk <- rbind(data.frame(time = 0, strata = "At risk:", n_risk = ""), data_risk)
+        data_risk$strata <- as.factor(data_risk$strata)
+        data_risk$strata <- stats::relevel(data_risk$strata, "At risk:")
+        levels(data_risk$strata) <- c("At risk:", legend.labels)
+      } else {
+        data_risk$strata <- "At risk:"
+      }
+      g_risk <- ggplot2::ggplot(data_risk[data_risk$time <= max.t,], 
+                                ggplot2::aes(time, strata, label = n_risk)) +
+        ggplot2::coord_cartesian(xlim = x_lim, clip = "off") +
+        ggplot2::geom_text(size = textsize.risk * 127/360) +
+        ggplot2::scale_x_continuous(breaks = breaks.t, expand = c(0, 0)) +
+        ggplot2::scale_y_discrete(expand = c(0, 0), limits = rev) +
+        ggplot2::theme_classic() +
+        ggplot2::theme(
+          axis.line = ggplot2::element_blank(),
+          axis.text.x = ggplot2::element_blank(),
+          axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = margin.risk), 
+                                              size = textsize.risk),
+          axis.ticks = ggplot2::element_blank(),
+          axis.title = ggplot2::element_blank(),
+          panel.grid = ggplot2::element_blank()
+        )
+    } else if (risk.table == 2) {
+      if (n_group > 1) {
+        data_risk$strata <- factor(as.numeric(sub("strata=", "", s$strata)), levels = levels_order) 
+        colors_risk <- colors[seq_len(n_group)]
+      } else {
+        stop("[ggKM] risk.table == 2 not implemented for n_group == 1")
+      }
+      g_risk <- ggplot2::ggplot(
+        data_risk[data_risk$time <= max.t,],
+        ggplot2::aes(time, strata, label = n_risk)) +
+        ggplot2::coord_cartesian(xlim = x_lim, clip = "off") +
+        ggplot2::geom_text(ggplot2::aes(color = strata), size = textsize.risk * 127/360) +
+        ggplot2::scale_color_manual(values = colors_risk, guide = "none") +
+        ggplot2::scale_x_continuous(breaks = breaks.t, expand = c(0, 0)) +
+        ggplot2::scale_y_discrete(expand = c(0, 0), limits = rev(levels(data_risk$strata))) +
+        ggplot2::theme_classic() + ggplot2::ggtitle(" ") +
+        ggplot2::theme(
+          axis.line   = ggplot2::element_blank(),
+          axis.text.x = ggplot2::element_blank(),
+          axis.text.y = ggplot2::element_blank(),
+          axis.ticks  = ggplot2::element_blank(),
+          axis.title  = ggplot2::element_blank(),
+          panel.grid  = ggplot2::element_blank(),
+          plot.title = ggplot2::element_text(hjust = 0, size = textsize.axis, 
+                                             margin = ggplot2::margin(b = 0)),
+          plot.title.position = "plot"
+        ) + ggplot2::labs(y = NULL) +
+        ggplot2::annotation_custom(
+          grid::textGrob(
+            "At risk", rot = 90, x = grid::unit(-2.75, "lines"),
+            gp = grid::gpar(fontsize = textsize.axis)
+          )
+        )
+    } else stop("[ggKM] invalid risk.table")
+    if (risk.table == 2) {
+      y_lab <- "" # dummy title for spacing
     } else {
-      data_risk$strata <- "At risk:"
+      y_lab <- NULL
     }
-    g_risk <- ggplot2::ggplot(data_risk[data_risk$time <= max.t,], ggplot2::aes(time, strata, label = n_risk)) +
-      ggplot2::coord_cartesian(xlim = x_lim, clip = "off") +
-      ggplot2::geom_text(size = textsize.risk * 127/360) +
-      ggplot2::scale_x_continuous(breaks = breaks.t, expand = c(0, 0)) +
-      ggplot2::scale_y_discrete(expand = c(0, 0), limits = rev) +
-      ggplot2::theme_classic() +
-      ggplot2::theme(
-        axis.line = ggplot2::element_blank(),
-        axis.text.x = ggplot2::element_blank(),
-        axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = margin.risk), 
-                                            size = textsize.risk),
-        axis.ticks = ggplot2::element_blank(),
-        axis.title = ggplot2::element_blank(),
-        panel.grid = ggplot2::element_blank(),
-        plot.title = ggplot2::element_text(
-          hjust = 0,
-          size = textsize.axis,
-          margin = ggplot2::margin(b = 32)
-        ),
-        plot.title.position = "plot"
-      )
-    g_KM <- g_KM + ggplot2::labs(y = NULL) +
+    g_KM <- g_KM + ggplot2::labs(y = y_lab) + 
       ggplot2::annotation_custom(
         grid::textGrob(
           title.s, rot = 90, x = grid::unit(-2.75, "lines"),

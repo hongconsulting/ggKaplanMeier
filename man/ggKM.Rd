@@ -34,7 +34,7 @@ ggKM(
   line.width = 0.5,
   line.height = 0.025,
   max.t = NULL,
-  risk.table = TRUE,
+  risk.table = 1,
   risk.table.prop = 0.2,
   t.labels = NULL,
   textsize.axis = 12,
@@ -150,7 +150,12 @@ the risk table labels and the risk table. Default = \code{16}.}
 \item{max.t}{Optional numeric value specifying the maximum time up to which
 the Kaplan–Meier plot and risk table are displayed.}
 
-\item{risk.table}{Logical; if \code{TRUE}, show risk table. Default = \code{TRUE}.}
+\item{risk.table}{Integer specifying the risk table mode:
+\itemize{
+\item \code{0}: No risk table
+\item \code{1} (default): Labelled risk table
+\item \code{2}: Color-coded risk table
+}}
 
 \item{risk.table.prop}{Relative height of the risk table. Default = \code{0.2}.}
 
@@ -170,7 +175,7 @@ time-axis breaks defined by \code{breaks.t}.}
 \item{weights}{Optional numeric vector of observation weights.}
 }
 \value{
-A \code{ggplot} (+ \code{patchwork} if \code{risk.table} = \code{TRUE}) object.
+A \code{ggplot} (+ \code{patchwork} if \code{risk.table} ≥ \code{1}) object.
 }
 \description{
 Generates a Kaplan–Meier plot with optional confidence intervals and risk
@@ -190,7 +195,7 @@ censored) for the current \code{group}
 }
 The custom function must return a \code{data.frame} with the following columns:
 \itemize{
-\item \verb{$time}: unique event times
+\item \verb{$time}: times
 \item \verb{$surv}: survival estimate
 \item \verb{$lower}: lower confidence limit
 \item \verb{$upper}: upper confidence limit

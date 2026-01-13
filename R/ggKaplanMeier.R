@@ -398,7 +398,7 @@ ggKM <- function(time, status, group = NULL,
                    legend.text.align = legend.text.align,
                    plot.margin = ggplot2::margin(t = margin.KM.t, r = margin.KM.r, 
                                                  b = margin.KM.b, l = margin.KM.l))
-  if (CI > 0) {
+  if (CI != "none") {
     g_KM <- g_KM +
       ggplot2::geom_ribbon(data = data_pruned, 
                            ggplot2::aes(ymin = lower, ymax = upper, fill = fstrata),
@@ -406,13 +406,15 @@ ggKM <- function(time, status, group = NULL,
   }
   data_censor <- ggKM.censor(data_summary, data_input)
   data_censor$fstrata <- factor(data_censor$strata, levels = levels_order)
-  g_KM <- g_KM + ggplot2::geom_segment(
-    data = data_censor[data_censor$time <= max.t,],
-    ggplot2::aes(x = time, xend = time,
-                 y = surv - line.height/2, yend = surv + line.height/2,
-                 color = fstrata),
-    linewidth = line.width
-  )
+  if (!is.null(data_censor$time)) {
+    g_KM <- g_KM + ggplot2::geom_segment(
+      data = data_censor[data_censor$time <= max.t,],
+      ggplot2::aes(x = time, xend = time,
+                   y = surv - line.height/2, yend = surv + line.height/2,
+                   color = fstrata),
+      linewidth = line.width
+    )
+  }
   g_KM <- g_KM + ggplot2::geom_line(linewidth = line.width)
   if (risk.table >= 1) { 
     s <- summary(fit, times = breaks.t)

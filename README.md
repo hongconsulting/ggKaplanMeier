@@ -56,7 +56,7 @@ print(fig1b)
 library(ggKaplanMeier)
 data <- survival::colon
 fig1 <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, 
-             colors = c("#0087BD", "#009F6B", "#FFD300", "#C40233"), 
+             colors = c("#0087BD", "#009F6B", "#FEA500", "#C40233"), 
              legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), 
              legend.pos = c(0.5, 0.1), risk.table = 2, title.s = "Overall survival", 
              title.t = "Time (months)")

@@ -174,7 +174,7 @@ ggKM.WH <- function(data_input, method) {
 #' @param CI.alpha Alpha transparency of the confidence intervals. Default = 
 #' `0.2`.
 #' @param colors Vector of colors of the survival curves. Default = `c("#0087BD", 
-#' "#C40233", "#009F6B", "#FEA500", "#9755AE", "#0098A6", "#FFD300", "#D8668B")`.
+#' "#C40233", "#009F6B", "#FEA500", "#9755AE", "#33B1BD", "#FFD300", "#D8668B")`.
 #' @param digits.fixed Number of decimal places for the risk table if `weights` 
 #' are used. Default = `1`.
 #' @param grid.color Gridline color. Default = `grDevices::rgb(0.95, 0.95, 0.95)`.
@@ -296,7 +296,7 @@ ggKM <- function(time, status, group = NULL,
                  breaks.s = seq(0, 1, 0.25), breaks.t = NULL,
                  CI = "cloglog", CI.alpha = 0.2,
                  colors = c("#0087BD", "#C40233", "#009F6B", "#FEA500", 
-                            "#9755AE", "#0098A6", "#FFD300", "#D8668B"),
+                            "#9755AE", "#33B1BD", "#FFD300", "#D8668B"),
                  digits.fixed = 1,
                  grid.color = grDevices::rgb(0.95, 0.95, 0.95),
                  grid.s = seq(0, 1, 0.25), grid.t = NULL, grid.width = 0.5,

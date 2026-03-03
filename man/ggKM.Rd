@@ -12,7 +12,7 @@ ggKM(
   breaks.t = NULL,
   CI = "cloglog",
   CI.alpha = 0.2,
-  colors = c("#0087BD", "#C40233", "#009F6B", "#FEA500", "#9755AE", "#0098A6", "#FFD300",
+  colors = c("#0087BD", "#C40233", "#009F6B", "#FEA500", "#9755AE", "#33B1BD", "#FFD300",
     "#D8668B"),
   digits.fixed = 1,
   grid.color = grDevices::rgb(0.95, 0.95, 0.95),
@@ -87,7 +87,7 @@ package)
 \item{CI.alpha}{Alpha transparency of the confidence intervals. Default =
 \code{0.2}.}
 
-\item{colors}{Vector of colors of the survival curves. Default = \code{c("#0087BD",  "#C40233", "#009F6B", "#FEA500", "#9755AE", "#0098A6", "#FFD300", "#D8668B")}.}
+\item{colors}{Vector of colors of the survival curves. Default = \code{c("#0087BD",  "#C40233", "#009F6B", "#FEA500", "#9755AE", "#33B1BD", "#FFD300", "#D8668B")}.}
 
 \item{digits.fixed}{Number of decimal places for the risk table if \code{weights}
 are used. Default = \code{1}.}

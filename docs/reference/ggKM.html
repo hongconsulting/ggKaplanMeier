@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,8 @@ table.</p>
 <span>  breaks.t <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI <span class="op">=</span> <span class="st">"cloglog"</span>,</span>
 <span>  CI.alpha <span class="op">=</span> <span class="fl">0.2</span>,</span>
-<span>  colors <span class="op">=</span> <span class="op">(</span><span class="fu">ggsci</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/ggsci/reference/pal_nejm.html" class="external-link">pal_nejm</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>,</span>
+<span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#0087BD"</span>, <span class="st">"#C40233"</span>, <span class="st">"#009F6B"</span>, <span class="st">"#FFD300"</span>, <span class="st">"#F37715"</span>, <span class="st">"#9755AE"</span>, <span class="st">"#5774C4"</span>,</span>
+<span>    <span class="st">"#BF2779"</span><span class="op">)</span>,</span>
 <span>  digits.fixed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  grid.color <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">0.95</span>, <span class="fl">0.95</span>, <span class="fl">0.95</span><span class="op">)</span>,</span>
 <span>  grid.s <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.25</span><span class="op">)</span>,</span>
@@ -136,8 +137,7 @@ package)</p></li>
 
 
 <dt id="arg-colors">colors<a class="anchor" aria-label="anchor" href="#arg-colors"></a></dt>
-<dd><p>Vector of colors of the survival curves. Default =
-<code>ggsci::pal_nejm()(8)</code>.</p></dd>
+<dd><p>Vector of colors of the survival curves. Default = <code>c("#0087BD",  "#C40233", "#009F6B", "#FFD300", "#F37715", "#9755AE", "#5774C4", "#BF2779")</code>.</p></dd>
 
 
 <dt id="arg-digits-fixed">digits.fixed<a class="anchor" aria-label="anchor" href="#arg-digits-fixed"></a></dt>

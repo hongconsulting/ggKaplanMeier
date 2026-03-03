@@ -12,7 +12,8 @@ ggKM(
   breaks.t = NULL,
   CI = "cloglog",
   CI.alpha = 0.2,
-  colors = (ggsci::pal_nejm())(8),
+  colors = c("#0087BD", "#C40233", "#009F6B", "#FFD300", "#F37715", "#9755AE", "#5774C4",
+    "#BF2779"),
   digits.fixed = 1,
   grid.color = grDevices::rgb(0.95, 0.95, 0.95),
   grid.s = seq(0, 1, 0.25),
@@ -86,8 +87,7 @@ package)
 \item{CI.alpha}{Alpha transparency of the confidence intervals. Default =
 \code{0.2}.}
 
-\item{colors}{Vector of colors of the survival curves. Default =
-\code{ggsci::pal_nejm()(8)}.}
+\item{colors}{Vector of colors of the survival curves. Default = \code{c("#0087BD",  "#C40233", "#009F6B", "#FFD300", "#F37715", "#9755AE", "#5774C4", "#BF2779")}.}
 
 \item{digits.fixed}{Number of decimal places for the risk table if \code{weights}
 are used. Default = \code{1}.}

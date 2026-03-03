@@ -1,6 +1,6 @@
 Package: ggKaplanMeier
 Title: Kaplan-Meier plots
-Version: 0.14.1
+Version: 0.14.2
 Authors@R: 
     person("Wei", "Hong", , "wei.hong@hongconsulting.ai", role = c("aut", "cre"))
 Description: Kaplan–Meier plots using the 'ggplot2' package, with an overall 
@@ -11,7 +11,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports: 
     ggplot2,
-    ggsci,
     patchwork,
     survival
 Suggests:

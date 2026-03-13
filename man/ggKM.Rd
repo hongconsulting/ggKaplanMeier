@@ -175,7 +175,8 @@ time-axis breaks defined by \code{breaks.t}.}
 \item{weights}{Optional numeric vector of observation weights.}
 }
 \value{
-A \code{ggplot} (+ \code{patchwork} if \code{risk.table} ≥ \code{1}) object.
+A \code{ggplot} (+ \code{patchwork} if \code{risk.table} ≥ \code{1}) object. The returned
+object also stores the processed input \code{time}, \code{status}, and \code{group} as attributes.
 }
 \description{
 Generates a Kaplan–Meier plot with optional confidence intervals and risk

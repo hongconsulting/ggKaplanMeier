@@ -230,7 +230,8 @@ ggKM.WH <- function(data_input, method) {
 #' @param title.s Y-axis (survival) title. Default = `"Survival"`.
 #' @param title.t X-axis (time) title. Default = `"Time"`.
 #' @param weights Optional numeric vector of observation weights.
-#' @return A `ggplot` (+ `patchwork` if `risk.table` ≥ `1`) object.
+#' @return A `ggplot` (+ `patchwork` if `risk.table` ≥ `1`) object. The returned 
+#' object also stores the processed input `time`, `status`, and `group` as attributes.
 #' @details
 #' Observations with invalid `time` or missing `status` are automatically 
 #' excluded.
@@ -501,5 +502,33 @@ ggKM <- function(time, status, group = NULL,
     g <- g_KM / g_risk +
       patchwork::plot_layout(heights = c(((1 - risk.table.prop) / risk.table.prop), 1))
   }
+  attr(g, "time") <- time
+  attr(g, "status") <- status
+  attr(g, "group") <- group
   return(g)
+}
+
+#' Add extra label to a ggKM legend
+#'
+#' Adds an extra text label to an existing legend of a `ggKM` plot.
+#' @param input A `ggKM` plot object.
+#' @param label String to append as an extra legend label.
+#' @return A deep copy of the input `ggKM` object with the added legend label.
+#' @export
+ggKM.legend.extra <- function(input, label) {
+  # R CMD check behavior
+  time <- surv <- fstrata <- NULL
+  output <- unserialize(serialize(input, NULL))
+  output[[1]]$scales$scales[[1]]$labels <- c(input[[1]]$scales$scales[[1]]$labels, label)
+  output[[1]] <- output[[1]] +
+    ggplot2::geom_point(
+      data = data.frame(time = 0, surv = 0, fstrata = "dummy"),
+      ggplot2::aes(time, surv, colour = fstrata, fill = fstrata),
+      alpha = 0,
+      show.legend = TRUE
+    ) +
+    ggplot2::theme(
+      legend.key = ggplot2::element_rect(fill = NA, colour = NA)
+    )
+  return(output)  
 }

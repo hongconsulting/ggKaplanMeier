@@ -14,8 +14,16 @@ A deep copy of the input \code{ggKM} object with the added legend label.
 }
 \description{
 Modifies the legend of a \code{ggKM} plot by appending the median survival time
-and its 95\% confidence interval to each group label. If exactly two groups
+and its 95\% confidence interval¹ to each group label. If exactly two groups
 are present, the legend is further extended with the hazard ratio, 95\%
-confidence interval, and \emph{p}-value from a Cox regression model comparing the
+confidence interval, and \emph{p}-value from a Cox regression model² comparing the
 two groups.
+}
+\references{
+\enumerate{
+\item Brookmeyer, R. and Crowley, J., 1982. A confidence interval for the median
+survival time. \emph{Biometrics}, pp. 29–41.
+\item Cox, D.R., 1972. Regression Models and Life-Tables. \emph{Journal of the Royal
+Statistical Society}, Series B. 34(2), pp. 187–220.
+}
 }

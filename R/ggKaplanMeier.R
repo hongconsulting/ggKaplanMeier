@@ -585,12 +585,17 @@ ggKM.quantile <- function(KM_time, KM_surv, KM_lower, KM_upper, KM_group,
 #' Add survival summary information to a ggKM legend
 #'
 #' Modifies the legend of a `ggKM` plot by appending the median survival time
-#' and its 95% confidence interval to each group label. If exactly two groups
+#' and its 95% confidence interval¹ to each group label. If exactly two groups
 #' are present, the legend is further extended with the hazard ratio, 95% 
-#' confidence interval, and *p*-value from a Cox regression model comparing the 
+#' confidence interval, and *p*-value from a Cox regression model² comparing the 
 #' two groups.
 #' @param input A `ggKM` plot object.
 #' @return A deep copy of the input `ggKM` object with the added legend label.
+#' @references
+#' 1. Brookmeyer, R. and Crowley, J., 1982. A confidence interval for the median
+#' survival time. *Biometrics*, pp. 29–41.
+#' 2. Cox, D.R., 1972. Regression Models and Life-Tables. *Journal of the Royal 
+#' Statistical Society*, Series B. 34(2), pp. 187–220.
 #' @export
 ggKM.surv.extra <- function(input) {
   KM_time <- attr(input, "KM_time")

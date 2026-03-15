@@ -20,12 +20,12 @@ ggKM(
   grid.t = NULL,
   grid.width = 0.5,
   legend.direction = "vertical",
-  legend.just = "center",
+  legend.just = c("right", "top"),
   legend.label.pos = "left",
   legend.labels = NULL,
   legend.ncol = NULL,
   legend.nrow = NULL,
-  legend.pos = c(0.9, 0.9),
+  legend.pos = c(1, 1),
   legend.text.align = 1,
   margin.KM.b = 0,
   margin.KM.l = 0,
@@ -107,7 +107,7 @@ are used. Default = \code{1}.}
 Can be a single keyword (e.g., \code{"center"}), a keyword pair specifying
 horizontal and vertical justification (e.g., \code{c("left", "top")},
 \code{c("right", "bottom")}) respectively, or a numeric vector of length 2 giving
-relative coordinates within the plot area. Default = \code{"center"}.}
+relative coordinates within the plot area. Default = \code{c("right", "top")}.}
 
 \item{legend.label.pos}{Legend label position (\code{"left"} or \code{"right"})
 relative to the legend symbol. Default = \code{"left"}.}
@@ -122,7 +122,7 @@ Default = \code{NULL}.}
 
 \item{legend.pos}{Position of the legend. Can be a keyword such as \code{"none"},
 \code{"left"}, \code{"right"}, \code{"bottom"}, or \code{"top"}, or a numeric vector of length 2
-giving relative coordinates within the plot area. Default = \code{c(0.9, 0.9)}.
+giving relative coordinates within the plot area. Default = \code{c(1, 1)}.
 Set to \code{"none"} if \code{group} is \code{NULL}.}
 
 \item{legend.text.align}{Legend text alignment: \code{0} = left, \code{0.5} = center,
@@ -177,6 +177,25 @@ time-axis breaks defined by \code{breaks.t}.}
 \value{
 A \code{ggplot} (+ \code{patchwork} if \code{risk.table} ≥ \code{1}) object. The returned
 object also stores the processed input \code{time}, \code{status}, and \code{group} as attributes.
+
+A \code{ggplot} object (combined with \code{patchwork} if \verb{risk.table ≥ 1}).
+The returned object stores additional data as attributes:
+\itemize{
+\item Processed input data:
+\itemize{
+\item \code{attr(x, "time")}: follow-up times
+\item \code{attr(x, "status")}: event indicator
+\item \code{attr(x, "group")}: grouping variable
+}
+\item Kaplan–Meier estimates (truncated at \code{max.t}):
+\itemize{
+\item \code{attr(x, "KM_time")}: step times
+\item \code{attr(x, "KM_surv")}: survival estimates
+\item \code{attr(x, "KM_lower")}: lower confidence limits
+\item \code{attr(x, "KM_upper")}: upper confidence limits
+\item \code{attr(x, "KM_group")}: grouping variable
+}
+}
 }
 \description{
 Generates a Kaplan–Meier plot with optional confidence intervals and risk

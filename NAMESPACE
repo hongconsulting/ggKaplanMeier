@@ -2,4 +2,5 @@
 
 export(ggKM)
 export(ggKM.legend.extra)
+export(ggKM.surv.extra)
 import(patchwork)

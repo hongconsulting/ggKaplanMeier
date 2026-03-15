@@ -50,6 +50,12 @@ print(fig1b)
 
 ![](man/figures/README-example_1-2.png)<!-- -->
 
+``` r
+print(ggKM.surv.extra(fig1b))
+```
+
+![](man/figures/README-example_1-3.png)<!-- -->
+
 ## Example: Dukes stage B/C colon cancer study
 
 ``` r
@@ -57,9 +63,10 @@ library(ggKaplanMeier)
 data <- survival::colon
 fig1 <- ggKM(data$time * 12 / 365.2425, data$status, data$extent, 
              colors = c("#0087BD", "#009F6B", "#FEA500", "#C40233"), 
-             legend.direction = "horizontal", legend.labels = c("T1", "T2", "T3", "T4"), 
-             legend.pos = c(0.5, 0.1), risk.table = 2, title.s = "Overall survival", 
-             title.t = "Time (months)")
+             legend.direction = "horizontal", legend.just = "center", 
+             legend.labels = c("T1", "T2", "T3", "T4"), 
+             legend.pos = c(0.5, 0.1), risk.table = 2, 
+             title.s = "Overall survival", title.t = "Time (months)")
 print(fig1)
 ```
 

@@ -187,7 +187,7 @@ ggKM.WH <- function(data_input, method) {
 #' Can be a single keyword (e.g., `"center"`), a keyword pair specifying 
 #' horizontal and vertical justification (e.g., `c("left", "top")`, 
 #' `c("right", "bottom")`) respectively, or a numeric vector of length 2 giving 
-#' relative coordinates within the plot area. Default = `"center"`.
+#' relative coordinates within the plot area. Default = `c("right", "top")`.
 #' @param legend.label.pos Legend label position (`"left"` or `"right"`) 
 #' relative to the legend symbol. Default = `"left"`.
 #' @param legend.labels Character vector of group labels.
@@ -197,7 +197,7 @@ ggKM.WH <- function(data_input, method) {
 #' Default = `NULL`.
 #' @param legend.pos Position of the legend. Can be a keyword such as `"none"`, 
 #' `"left"`, `"right"`, `"bottom"`, or `"top"`, or a numeric vector of length 2 
-#' giving relative coordinates within the plot area. Default = `c(0.9, 0.9)`. 
+#' giving relative coordinates within the plot area. Default = `c(1, 1)`. 
 #' Set to `"none"` if `group` is `NULL`.
 #' @param legend.text.align Legend text alignment: `0` = left, `0.5` = center, 
 #' `1` = right. Default = `1`.
@@ -232,6 +232,25 @@ ggKM.WH <- function(data_input, method) {
 #' @param weights Optional numeric vector of observation weights.
 #' @return A `ggplot` (+ `patchwork` if `risk.table` ≥ `1`) object. The returned 
 #' object also stores the processed input `time`, `status`, and `group` as attributes.
+#' 
+#' @return A `ggplot` object (combined with `patchwork` if `risk.table ≥ 1`). 
+#' The returned object stores additional data as attributes:
+#' \itemize{
+#'   \item Processed input data:
+#'   \itemize{
+#'     \item `attr(x, "time")`: follow-up times
+#'     \item `attr(x, "status")`: event indicator
+#'     \item `attr(x, "group")`: grouping variable
+#'   }
+#'   \item Kaplan–Meier estimates (truncated at `max.t`):
+#'   \itemize{
+#'     \item `attr(x, "KM_time")`: step times
+#'     \item `attr(x, "KM_surv")`: survival estimates
+#'     \item `attr(x, "KM_lower")`: lower confidence limits
+#'     \item `attr(x, "KM_upper")`: upper confidence limits
+#'     \item `attr(x, "KM_group")`: grouping variable
+#'   }
+#' }
 #' @details
 #' Observations with invalid `time` or missing `status` are automatically 
 #' excluded.
@@ -301,10 +320,10 @@ ggKM <- function(time, status, group = NULL,
                  digits.fixed = 1,
                  grid.color = grDevices::rgb(0.95, 0.95, 0.95),
                  grid.s = seq(0, 1, 0.25), grid.t = NULL, grid.width = 0.5,
-                 legend.direction = "vertical", legend.just = "center",
+                 legend.direction = "vertical", legend.just = c("right", "top"),
                  legend.label.pos = "left", 
                  legend.labels = NULL, legend.ncol = NULL, legend.nrow = NULL,
-                 legend.pos = c(0.9, 0.9), legend.text.align = 1,
+                 legend.pos = c(1, 1), legend.text.align = 1,
                  margin.KM.b = 0, margin.KM.l = 0, margin.KM.r = 0, margin.KM.t = 4,
                  margin.risk = 16, line.width = 0.5, line.height = 0.025, max.t = NULL,
                  risk.table = 1, risk.table.prop = 0.2, t.labels = NULL,
@@ -398,7 +417,8 @@ ggKM <- function(time, status, group = NULL,
                    legend.justification = legend.just,
                    legend.position = legend.pos,
                    legend.text = ggplot2::element_text(size = textsize.legend),
-                   legend.text.align = legend.text.align,
+                   legend.text.align = legend.text.align, 
+                   legend.title = ggplot2::element_blank(),
                    plot.margin = ggplot2::margin(t = margin.KM.t, r = margin.KM.r, 
                                                  b = margin.KM.b, l = margin.KM.l))
   if (CI != "none") {
@@ -505,6 +525,11 @@ ggKM <- function(time, status, group = NULL,
   attr(g, "time") <- time
   attr(g, "status") <- status
   attr(g, "group") <- group
+  attr(g, "KM_time") <- data_pruned$time
+  attr(g, "KM_surv") <- data_pruned$surv
+  attr(g, "KM_lower") <- data_pruned$lower
+  attr(g, "KM_upper") <- data_pruned$upper
+  attr(g, "KM_group") <- data_pruned$strata 
   return(g)
 }
 
@@ -531,4 +556,74 @@ ggKM.legend.extra <- function(input, label) {
       legend.key = ggplot2::element_rect(fill = NA, colour = NA)
     )
   return(output)  
+}
+
+ggKM.quantile <- function(KM_time, KM_surv, KM_lower, KM_upper, KM_group, 
+                          p = 0.5, digits.fixed = 1) {
+  groups <- sort(unique(KM_group))
+  output <- matrix("", length(groups), 3)
+  colnames(output) <- c("surv", "lower", "upper")
+  rownames(output) <- groups
+  format <- paste0("%.", digits.fixed, "f")
+  for (g in seq_along(groups)) {
+    current_i <- KM_group == groups[g]
+    current_t  <- KM_time[current_i]
+    current_S  <- KM_surv[current_i]
+    current_LL <- KM_lower[current_i]
+    current_UL <- KM_upper[current_i]
+    targeti_S  <- which(current_S  <= p)[1]
+    targeti_LL <- which(current_UL <= p)[1]
+    targeti_UL <- which(current_LL <= p)[1]
+    if (!is.na(targeti_S))  output[g, 1] <- sprintf(format, current_t[targeti_S]) 
+    if (!is.na(targeti_UL)) output[g, 2] <- sprintf(format, current_t[targeti_UL]) 
+    if (!is.na(targeti_LL)) output[g, 3] <- sprintf(format, current_t[targeti_LL]) 
+  }
+  output[output == ""] <- "NR"
+  return(output)
+}
+
+#' Add survival summary information to a ggKM legend
+#'
+#' Modifies the legend of a `ggKM` plot by appending the median survival time
+#' and its 95% confidence interval to each group label. If exactly two groups
+#' are present, the legend is further extended with the hazard ratio, 95% 
+#' confidence interval, and *p*-value from a Cox regression model comparing the 
+#' two groups.
+#' @param input A `ggKM` plot object.
+#' @return A deep copy of the input `ggKM` object with the added legend label.
+#' @export
+ggKM.surv.extra <- function(input) {
+  KM_time <- attr(input, "KM_time")
+  KM_surv <- attr(input, "KM_surv")
+  KM_lower <- attr(input, "KM_lower")
+  KM_upper <- attr(input, "KM_upper")
+  KM_group <- attr(input, "KM_group")
+  n_group <- length(unique(KM_group))
+  output <- unserialize(serialize(input, NULL))
+  labels <- input[[1]]$scales$scales[[1]]$labels
+  medians <- ggKM.quantile(KM_time, KM_surv, KM_lower, KM_upper, KM_group, p = 0.5)
+  for (i in 1:n_group) {
+    labels[i] <- paste0(labels[i], ": median ", medians[i, 1],  
+                        " (95%CI ", medians[i, 2], "\u2212", medians[i, 3], ")")
+  }
+  output[[1]]$scales$scales[[1]]$labels <- labels
+  if (n_group == 2) {
+    time <- attr(input, "time")
+    status <- attr(input, "status")
+    group <- attr(input, "group")
+    Cox <- summary(survival::coxph(survival::Surv(time, status) ~ as.factor(group)))$coefficients
+    HR <- sprintf("%.2f", Cox[1, 2])
+    LL <- sprintf("%.2f", exp(Cox[1, 1] - stats::qnorm(0.975) * Cox[1, 3]))
+    UL <- sprintf("%.2f", exp(Cox[1, 1] + stats::qnorm(0.975) * Cox[1, 3]))
+    if (Cox[1, 5] < 0.001) {
+      p <- "\U0001D45D < 0.001"
+    } else if (Cox[1, 5] > 0.999) {
+      p <- "\U0001D45D > 0.999"
+    } else {
+      p <- paste0("\U0001D45D = ", sprintf("%.2g", Cox[1, 5]))
+    }
+    Coxlabel <- paste0("\nHR ", HR, " (95%CI ", LL, "\u2212", UL, ")\n", p)
+    output <- ggKM.legend.extra(output, Coxlabel)
+  }
+  return(output)
 }

@@ -9,7 +9,7 @@ table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggKaplanMeier</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,12 +57,12 @@ table.</p>
 <span>  grid.t <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  grid.width <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  legend.direction <span class="op">=</span> <span class="st">"vertical"</span>,</span>
-<span>  legend.just <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>  legend.just <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"top"</span><span class="op">)</span>,</span>
 <span>  legend.label.pos <span class="op">=</span> <span class="st">"left"</span>,</span>
 <span>  legend.labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend.ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend.nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  legend.pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
+<span>  legend.pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  legend.text.align <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  margin.KM.b <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  margin.KM.l <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -171,7 +171,7 @@ are used. Default = <code>1</code>.</p></dd>
 Can be a single keyword (e.g., <code>"center"</code>), a keyword pair specifying
 horizontal and vertical justification (e.g., <code>c("left", "top")</code>,
 <code>c("right", "bottom")</code>) respectively, or a numeric vector of length 2 giving
-relative coordinates within the plot area. Default = <code>"center"</code>.</p></dd>
+relative coordinates within the plot area. Default = <code>c("right", "top")</code>.</p></dd>
 
 
 <dt id="arg-legend-label-pos">legend.label.pos<a class="anchor" aria-label="anchor" href="#arg-legend-label-pos"></a></dt>
@@ -196,7 +196,7 @@ Default = <code>NULL</code>.</p></dd>
 <dt id="arg-legend-pos">legend.pos<a class="anchor" aria-label="anchor" href="#arg-legend-pos"></a></dt>
 <dd><p>Position of the legend. Can be a keyword such as <code>"none"</code>,
 <code>"left"</code>, <code>"right"</code>, <code>"bottom"</code>, or <code>"top"</code>, or a numeric vector of length 2
-giving relative coordinates within the plot area. Default = <code>c(0.9, 0.9)</code>.
+giving relative coordinates within the plot area. Default = <code>c(1, 1)</code>.
 Set to <code>"none"</code> if <code>group</code> is <code>NULL</code>.</p></dd>
 
 
@@ -287,7 +287,18 @@ time-axis breaks defined by <code>breaks.t</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>ggplot</code> (+ <code>patchwork</code> if <code>risk.table</code> ≥ <code>1</code>) object. The returned
 object also stores the processed input <code>time</code>, <code>status</code>, and <code>group</code> as attributes.</p>
-    </div>
+<p>A <code>ggplot</code> object (combined with <code>patchwork</code> if <code>risk.table ≥ 1</code>).
+The returned object stores additional data as attributes:</p><ul><li><p>Processed input data:</p><ul><li><p><code>attr(x, "time")</code>: follow-up times</p></li>
+<li><p><code>attr(x, "status")</code>: event indicator</p></li>
+<li><p><code>attr(x, "group")</code>: grouping variable</p></li>
+</ul></li>
+<li><p>Kaplan–Meier estimates (truncated at <code>max.t</code>):</p><ul><li><p><code>attr(x, "KM_time")</code>: step times</p></li>
+<li><p><code>attr(x, "KM_surv")</code>: survival estimates</p></li>
+<li><p><code>attr(x, "KM_lower")</code>: lower confidence limits</p></li>
+<li><p><code>attr(x, "KM_upper")</code>: upper confidence limits</p></li>
+<li><p><code>attr(x, "KM_group")</code>: grouping variable</p></li>
+</ul></li>
+</ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Observations with invalid <code>time</code> or missing <code>status</code> are automatically

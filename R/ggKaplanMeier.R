@@ -330,6 +330,7 @@ ggKM <- function(time, status, group = NULL,
                  textsize.axis = 12, textsize.legend = 12, textsize.risk = 12,
                  title.s = "Survival", title.t = "Time", weights = NULL) {
   keep <- !is.na(time) & !is.na(status) & time > 0
+  colors <- c(colors, "#00000000") # need an extra dummy color
   if (is.null(weights)) {
     w <- rep(1, length(time))
     digits.fixed <- 0

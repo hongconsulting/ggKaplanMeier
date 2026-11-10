@@ -35,8 +35,8 @@ ggKM(
   line.width = 0.5,
   line.height = 0.025,
   max.t = NULL,
-  risk.table = 1,
-  risk.table.prop = 0.2,
+  risk.table = 2,
+  risk.table.prop = 0.1,
   t.labels = NULL,
   textsize.axis = 12,
   textsize.legend = 12,
@@ -153,11 +153,11 @@ the Kaplan–Meier plot and risk table are displayed.}
 \item{risk.table}{Integer specifying the risk table mode:
 \itemize{
 \item \code{0}: No risk table
-\item \code{1} (default): Labelled risk table
-\item \code{2}: Color-coded risk table
+\item \code{1}: Labelled risk table
+\item \code{2} (default): Color-coded risk table
 }}
 
-\item{risk.table.prop}{Relative height of the risk table. Default = \code{0.2}.}
+\item{risk.table.prop}{Relative height of the risk table. Default = \code{0.1}.}
 
 \item{t.labels}{Optional string vector specifying custom labels for the
 time-axis breaks defined by \code{breaks.t}.}

@@ -354,7 +354,7 @@ ggKM <- function(time, status, group = NULL,
   if (is.null(t.labels)) t.labels <- breaks.t
   data_input <- data.frame("time" = time, "status" = status, "strata" = group, "w" = w)
   data_censor <- data_input[data_input$status == 0,]
-  if (CI == "modcloglog") {
+  if (F) {
     fit <- survival::survfit(survival::Surv(time, status) ~ strata, 
                              data = data_input, conf.type = "log-log", 
                              conf.lower = "modified", weights = w)
@@ -522,6 +522,8 @@ ggKM <- function(time, status, group = NULL,
       )
     g <- g_KM / g_risk +
       patchwork::plot_layout(heights = c(((1 - risk.table.prop) / risk.table.prop), 1))
+  } else {
+    g <- g_KM
   }
   attr(g, "time") <- time
   attr(g, "status") <- status

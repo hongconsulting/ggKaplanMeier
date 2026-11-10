@@ -16,7 +16,7 @@ ggKM.Xvs1(
   breaks.t = NULL,
   CI = TRUE,
   CI.alpha = 0.2,
-  colors = c("#C40233", "#0087BD"),
+  colors = c("#0087BD", "#C40233"),
   digits.fixed = 1,
   grid.color = grDevices::rgb(0.95, 0.95, 0.95),
   grid.s = seq(0, 1, 0.25),
